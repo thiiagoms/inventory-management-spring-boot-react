@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: ims
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+  servlet:
+    multipart:
+      max-file-size: 2GB
+      max-request-size: 2GB

@@ -1,0 +1,11 @@
+.git
+.gitignore
+.env
+.idea
+backend/target
+backend/.env
+backend/.idea
+backend/.vscode
+.devops/backend/mysql/data
+**/.DS_Store
+**/*.log
