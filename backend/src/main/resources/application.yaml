@@ -1,6 +1,11 @@
 spring:
   application:
     name: ims
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:${MYSQL_PORT:3306}/${MYSQL_DATABASE:inventory}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}
+    username: ${SPRING_DATASOURCE_USERNAME:${MYSQL_USER:inventory}}
+    password: ${SPRING_DATASOURCE_PASSWORD:${MYSQL_PASSWORD:inventory_dev_password}}
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: validate
