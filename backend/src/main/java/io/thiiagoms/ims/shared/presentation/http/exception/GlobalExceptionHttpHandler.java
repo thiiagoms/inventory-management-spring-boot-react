@@ -1,7 +1,10 @@
 package io.thiiagoms.ims.shared.presentation.http.exception;
 
+import io.thiiagoms.ims.shared.application.exception.NotFoundException;
+import io.thiiagoms.ims.shared.application.exception.ResourceAlreadyExistsException;
+import io.thiiagoms.ims.shared.domain.exception.AuthorizationFailedException;
+import io.thiiagoms.ims.shared.domain.exception.InvalidDomainArgumentException;
 import java.time.Instant;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -10,103 +13,105 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-import io.thiiagoms.ims.shared.application.exception.NotFoundException;
-import io.thiiagoms.ims.shared.application.exception.ResourceAlreadyExistsException;
-import io.thiiagoms.ims.shared.domain.exception.AuthorizationFailedException;
-import io.thiiagoms.ims.shared.domain.exception.InvalidDomainArgumentException;
-
 @RestControllerAdvice
 public class GlobalExceptionHttpHandler {
 
-    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatch(
-            MethodArgumentTypeMismatchException exception) {
-        ErrorResponse response = new ErrorResponse(
-                Instant.now(),
-                HttpStatus.BAD_REQUEST.value(),
-                "validation_failed",
-                exception.getName(),
-                "The query parameter '%s' must be a valid integer.".formatted(exception.getName()));
+  @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+  public ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatch(
+      MethodArgumentTypeMismatchException exception) {
+    ErrorResponse response =
+        new ErrorResponse(
+            Instant.now(),
+            HttpStatus.BAD_REQUEST.value(),
+            "validation_failed",
+            exception.getName(),
+            "The query parameter '%s' must be a valid integer.".formatted(exception.getName()));
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-    }
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+  }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValid(
-            MethodArgumentNotValidException exception) {
-        FieldError fieldError = exception.getBindingResult()
-                .getFieldErrors()
-                .stream()
-                .findFirst()
-                .orElse(null);
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  public ResponseEntity<ErrorResponse> handleMethodArgumentNotValid(
+      MethodArgumentNotValidException exception) {
+    FieldError fieldError =
+        exception.getBindingResult().getFieldErrors().stream().findFirst().orElse(null);
 
-        ErrorResponse response = new ErrorResponse(
-                Instant.now(),
-                HttpStatus.BAD_REQUEST.value(),
-                "validation_failed",
-                fieldError != null ? fieldError.getField() : "request",
-                fieldError != null ? fieldError.getDefaultMessage() : "Request validation failed.");
+    ErrorResponse response =
+        new ErrorResponse(
+            Instant.now(),
+            HttpStatus.BAD_REQUEST.value(),
+            "validation_failed",
+            fieldError != null ? fieldError.getField() : "request",
+            fieldError != null ? fieldError.getDefaultMessage() : "Request validation failed.");
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-    }
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+  }
 
-    @ExceptionHandler(InvalidDomainArgumentException.class)
-    public ResponseEntity<ErrorResponse> handleInvalidArgument(InvalidDomainArgumentException exception) {
-        ErrorResponse response = new ErrorResponse(
-                Instant.now(),
-                HttpStatus.BAD_REQUEST.value(),
-                "validation_failed",
-                exception.getField(),
-                exception.getMessage());
+  @ExceptionHandler(InvalidDomainArgumentException.class)
+  public ResponseEntity<ErrorResponse> handleInvalidArgument(
+      InvalidDomainArgumentException exception) {
+    ErrorResponse response =
+        new ErrorResponse(
+            Instant.now(),
+            HttpStatus.BAD_REQUEST.value(),
+            "validation_failed",
+            exception.getField(),
+            exception.getMessage());
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-    }
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+  }
 
-    @ExceptionHandler(ResourceAlreadyExistsException.class)
-    public ResponseEntity<ErrorResponse> handleResourceAlreadyExists(ResourceAlreadyExistsException exception) {
-        ErrorResponse response = new ErrorResponse(
-                Instant.now(),
-                HttpStatus.CONFLICT.value(),
-                "resource_already_exists",
-                exception.getField(),
-                exception.getMessage());
+  @ExceptionHandler(ResourceAlreadyExistsException.class)
+  public ResponseEntity<ErrorResponse> handleResourceAlreadyExists(
+      ResourceAlreadyExistsException exception) {
+    ErrorResponse response =
+        new ErrorResponse(
+            Instant.now(),
+            HttpStatus.CONFLICT.value(),
+            "resource_already_exists",
+            exception.getField(),
+            exception.getMessage());
 
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
-    }
+    return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+  }
 
-    @ExceptionHandler(AuthorizationFailedException.class)
-    public ResponseEntity<ErrorResponse> handleAuthorizationFailed(AuthorizationFailedException exception) {
-        ErrorResponse response = new ErrorResponse(
-                Instant.now(),
-                HttpStatus.FORBIDDEN.value(),
-                "authorization_failed",
-                exception.getField(),
-                exception.getMessage());
+  @ExceptionHandler(AuthorizationFailedException.class)
+  public ResponseEntity<ErrorResponse> handleAuthorizationFailed(
+      AuthorizationFailedException exception) {
+    ErrorResponse response =
+        new ErrorResponse(
+            Instant.now(),
+            HttpStatus.FORBIDDEN.value(),
+            "authorization_failed",
+            exception.getField(),
+            exception.getMessage());
 
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
-    }
+    return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+  }
 
-    @ExceptionHandler(NotFoundException.class)
-    ResponseEntity<ErrorResponse> handleNotFoundException(NotFoundException exception) {
-        ErrorResponse response = new ErrorResponse(
-                Instant.now(),
-                HttpStatus.NOT_FOUND.value(),
-                "resource_not_found",
-                exception.getField(),
-                exception.getMessage());
+  @ExceptionHandler(NotFoundException.class)
+  ResponseEntity<ErrorResponse> handleNotFoundException(NotFoundException exception) {
+    ErrorResponse response =
+        new ErrorResponse(
+            Instant.now(),
+            HttpStatus.NOT_FOUND.value(),
+            "resource_not_found",
+            exception.getField(),
+            exception.getMessage());
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-    }
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+  }
 
-    @ExceptionHandler(RuntimeException.class)
-    ResponseEntity<ErrorResponse> handleRuntimeException(RuntimeException exception) {
-        ErrorResponse response = new ErrorResponse(
-                Instant.now(),
-                HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                "internal_server_error",
-                "unknow_field",
-                exception.getMessage());
+  @ExceptionHandler(RuntimeException.class)
+  ResponseEntity<ErrorResponse> handleRuntimeException(RuntimeException exception) {
+    ErrorResponse response =
+        new ErrorResponse(
+            Instant.now(),
+            HttpStatus.INTERNAL_SERVER_ERROR.value(),
+            "internal_server_error",
+            "unknow_field",
+            exception.getMessage());
 
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-    }
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+  }
 }

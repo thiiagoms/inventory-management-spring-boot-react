@@ -1,4 +1,4 @@
-package io.thiiagoms.ims.shared.domain.identity;
+package io.thiiagoms.ims.shared.domain.support;
 
 import io.thiiagoms.ims.shared.domain.valueobject.Id;
 
