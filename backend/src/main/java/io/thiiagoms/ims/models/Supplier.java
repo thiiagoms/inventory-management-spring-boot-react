@@ -42,15 +42,13 @@ public class Supplier {
 
   @Override
   public String toString() {
-    return """
-                {
-                    "id": "%d",
-                    "name": "%s",
-                    "contact": "%s",
-                    "address": "%s",
-                    "created_at": "%s"
-                }
-                """
+    return ("{%n"
+            + "    \"id\": \"%d\",%n"
+            + "    \"name\": \"%s\",%n"
+            + "    \"contact\": \"%s\",%n"
+            + "    \"address\": \"%s\",%n"
+            + "    \"created_at\": \"%s\"%n"
+            + "}%n")
         .formatted(this.id, this.name, this.contact, this.address, this.createdAt.toString());
   }
 }

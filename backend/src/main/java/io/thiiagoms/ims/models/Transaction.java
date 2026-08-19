@@ -80,17 +80,15 @@ public class Transaction {
 
   @Override
   public String toString() {
-    return """
-                    "id": "%d",
-                    "total_products": "%d",
-                    "total_prices": "%d",
-                    "transaction_type": "%s",
-                    "transaction_status": "%s",
-                    "descritpion": "%s",
-                    "note": "%s",
-                    "created_at": "%s",
-                    "updated_at": "%s"
-                """
+    return ("    \"id\": \"%d\",%n"
+            + "    \"total_products\": \"%d\",%n"
+            + "    \"total_prices\": \"%d\",%n"
+            + "    \"transaction_type\": \"%s\",%n"
+            + "    \"transaction_status\": \"%s\",%n"
+            + "    \"descritpion\": \"%s\",%n"
+            + "    \"note\": \"%s\",%n"
+            + "    \"created_at\": \"%s\",%n"
+            + "    \"updated_at\": \"%s\"%n")
         .formatted(
             this.id,
             this.totalProducts,

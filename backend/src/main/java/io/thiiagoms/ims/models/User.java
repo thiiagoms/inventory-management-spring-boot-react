@@ -58,16 +58,14 @@ public class User {
 
   @Override
   public String toString() {
-    return """
-                {
-                    "id": "%d",
-                    "name": "%s",
-                    "email": "%s",
-                    "phone": "%s",
-                    "role": "%s",
-                    "created_at": "%s"
-                }
-                """
+    return ("{%n"
+            + "    \"id\": \"%d\",%n"
+            + "    \"name\": \"%s\",%n"
+            + "    \"email\": \"%s\",%n"
+            + "    \"phone\": \"%s\",%n"
+            + "    \"role\": \"%s\",%n"
+            + "    \"created_at\": \"%s\"%n"
+            + "}%n")
         .formatted(
             this.id,
             this.name,

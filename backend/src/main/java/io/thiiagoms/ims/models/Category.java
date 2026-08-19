@@ -40,12 +40,7 @@ public class Category {
 
   @Override
   public String toString() {
-    return """
-                {
-                    "id": "%d",
-                    "created_at": "%s"
-                }
-                """
+    return ("{%n" + "    \"id\": \"%d\",%n" + "    \"created_at\": \"%s\"%n" + "}%n")
         .formatted(this.id, this.name, this.createdAt.toString());
   }
 }

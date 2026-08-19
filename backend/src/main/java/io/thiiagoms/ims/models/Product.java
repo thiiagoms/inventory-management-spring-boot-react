@@ -66,19 +66,17 @@ public class Product {
 
   @Override
   public String toString() {
-    return """
-                {
-                    "id": "%d",
-                    "name": "%s",
-                    "description": "%s",
-                    "sku": "%s",
-                    "image_url": "%s",
-                    "price": "%s",
-                    "stock_quantity": "%d",
-                    "expiry_date": "%s",
-                    "created_at": "%s"
-                }
-                """
+    return ("{%n"
+            + "    \"id\": \"%d\",%n"
+            + "    \"name\": \"%s\",%n"
+            + "    \"description\": \"%s\",%n"
+            + "    \"sku\": \"%s\",%n"
+            + "    \"image_url\": \"%s\",%n"
+            + "    \"price\": \"%s\",%n"
+            + "    \"stock_quantity\": \"%d\",%n"
+            + "    \"expiry_date\": \"%s\",%n"
+            + "    \"created_at\": \"%s\"%n"
+            + "}%n")
         .formatted(
             this.id,
             this.name,
