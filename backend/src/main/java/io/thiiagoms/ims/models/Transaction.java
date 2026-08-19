@@ -72,7 +72,7 @@ public class Transaction {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id")
-  private User user;
+  private UserJpa user;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "supplier_id")

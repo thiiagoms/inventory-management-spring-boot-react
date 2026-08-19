@@ -1,18 +1,14 @@
 package io.thiiagoms.ims.models;
 
-import io.thiiagoms.ims.enums.user.Role;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,11 +20,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "users")
-public class User {
+public class UserJpa {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  @Column(name = "id", columnDefinition = "BINARY(16)")
+  private UUID id;
 
   @NotBlank(message = "Name is required.")
   @Column(name = "name", nullable = false)
@@ -47,8 +43,8 @@ public class User {
   private String phone;
 
   @NotBlank(message = "Role is required.")
-  @Enumerated(EnumType.STRING)
-  private Role role;
+  @Column(name = "role", nullable = false)
+  private String role;
 
   @OneToMany(mappedBy = "user")
   private List<Transaction> transactions;
@@ -59,7 +55,7 @@ public class User {
   @Override
   public String toString() {
     return ("{%n"
-            + "    \"id\": \"%d\",%n"
+            + "    \"id\": \"%s\",%n"
             + "    \"name\": \"%s\",%n"
             + "    \"email\": \"%s\",%n"
             + "    \"phone\": \"%s\",%n"
