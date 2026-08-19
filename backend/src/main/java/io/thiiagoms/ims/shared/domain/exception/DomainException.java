@@ -5,10 +5,10 @@ import lombok.Getter;
 @Getter
 public abstract class DomainException extends RuntimeException {
 
-    protected String field;
+  protected String field;
 
-    protected DomainException(String message, String field) {
-        super(message);
-        this.field = field;
-    }
+  protected DomainException(String message, String field) {
+    super(message);
+    this.field = field;
+  }
 }
