@@ -8,12 +8,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.thiiagoms.ims.fixtures.user.domain.UserFake;
+import io.thiiagoms.ims.fixtures.user.infrastructure.persistence.repository.UserMemoryRepository;
 import io.thiiagoms.ims.user.application.exception.EmailAlreadyExistsException;
 import io.thiiagoms.ims.user.application.exception.PhoneAlreadyExistsException;
 import io.thiiagoms.ims.user.domain.repository.UserRepository;
 import io.thiiagoms.ims.user.domain.valueobject.Email;
 import io.thiiagoms.ims.user.domain.valueobject.Phone;
-import io.thiiagoms.ims.user.infrastructure.persistence.repository.UserMemoryRepository;
 
 public class UserUniquenessTest {
 

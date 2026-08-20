@@ -16,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import io.thiiagoms.ims.fixtures.user.domain.UserFake;
+import io.thiiagoms.ims.fixtures.user.infrastructure.persistence.repository.UserMemoryRepository;
 import io.thiiagoms.ims.shared.domain.valueobject.Id;
 import io.thiiagoms.ims.user.application.exception.EmailAlreadyExistsException;
 import io.thiiagoms.ims.user.application.exception.PhoneAlreadyExistsException;
@@ -30,7 +31,6 @@ import io.thiiagoms.ims.user.domain.valueobject.Name;
 import io.thiiagoms.ims.user.domain.valueobject.PasswordHash;
 import io.thiiagoms.ims.user.domain.valueobject.PasswordPlain;
 import io.thiiagoms.ims.user.domain.valueobject.Phone;
-import io.thiiagoms.ims.user.infrastructure.persistence.repository.UserMemoryRepository;
 
 @ExtendWith(MockitoExtension.class)
 public class UpdateUserTest {

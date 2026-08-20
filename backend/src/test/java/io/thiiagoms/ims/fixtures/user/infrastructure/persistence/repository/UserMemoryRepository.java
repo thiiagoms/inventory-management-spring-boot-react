@@ -1,4 +1,4 @@
-package io.thiiagoms.ims.user.infrastructure.persistence.repository;
+package io.thiiagoms.ims.fixtures.user.infrastructure.persistence.repository;
 
 import java.util.ArrayList;
 import java.util.List;
