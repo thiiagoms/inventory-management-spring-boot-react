@@ -2,6 +2,7 @@ package io.thiiagoms.ims.models;
 
 import io.thiiagoms.ims.enums.transaction.Status;
 import io.thiiagoms.ims.enums.transaction.Type;
+import io.thiiagoms.ims.user.infrastructure.persistence.model.UserJpa;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

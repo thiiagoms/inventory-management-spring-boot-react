@@ -1,5 +1,6 @@
-package io.thiiagoms.ims.models;
+package io.thiiagoms.ims.user.infrastructure.persistence.model;
 
+import io.thiiagoms.ims.models.Transaction;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -54,20 +55,22 @@ public class UserJpa {
 
   @Override
   public String toString() {
-    return ("{%n"
-            + "    \"id\": \"%s\",%n"
-            + "    \"name\": \"%s\",%n"
-            + "    \"email\": \"%s\",%n"
-            + "    \"phone\": \"%s\",%n"
-            + "    \"role\": \"%s\",%n"
-            + "    \"created_at\": \"%s\"%n"
-            + "}%n")
+    return """
+        {
+          "id": "%s",
+          "name": "%s",
+          "email": "%s",
+          "phone": "%s",
+          "role": "%s",
+          "created_at": "%s"
+        }
+        """
         .formatted(
             this.id,
             this.name,
             this.email,
             this.phone,
-            this.role.toString(),
-            this.createdAt.toString());
+            this.role,
+            this.createdAt);
   }
 }
