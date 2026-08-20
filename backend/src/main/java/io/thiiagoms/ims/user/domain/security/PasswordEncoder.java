@@ -5,7 +5,7 @@ import io.thiiagoms.ims.user.domain.valueobject.PasswordPlain;
 
 public interface PasswordEncoder {
 
-    PasswordHash encode(PasswordPlain password);
+  PasswordHash encode(PasswordPlain password);
 
-    Boolean matches(PasswordPlain password, PasswordHash hash);
+  Boolean matches(PasswordPlain password, PasswordHash hash);
 }

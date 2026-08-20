@@ -5,30 +5,28 @@ import io.thiiagoms.ims.shared.domain.support.Guard;
 
 public record PasswordHash(String value) {
 
-    public static final String FIELD = "password";
+  public static final String FIELD = "password";
 
-    public PasswordHash {
-        Guard.againstNullOrEmptyOrBlank(FIELD, value);
-        validate(value);
+  public PasswordHash {
+    Guard.againstNullOrEmptyOrBlank(FIELD, value);
+    validate(value);
+  }
+
+  private void validate(String value) {
+    boolean valid =
+        value.startsWith("$2a$") || value.startsWith("$2b$") || value.startsWith("$2y$");
+
+    if (!valid) {
+      fail("Invalid password hash.");
     }
+  }
 
-    private void validate(String value) {
-        boolean valid =
-                value.startsWith("$2a$")
-                        || value.startsWith("$2b$")
-                        || value.startsWith("$2y$");
+  @Override
+  public String toString() {
+    return "{*******************}";
+  }
 
-        if (!valid) {
-            fail("Invalid password hash.");
-        }
-    }
-
-    @Override
-    public String toString() {
-        return "{*******************}";
-    }
-
-    private void fail(String message) {
-        throw InvalidDomainArgumentException.with(message, FIELD);
-    }
+  private void fail(String message) {
+    throw InvalidDomainArgumentException.with(message, FIELD);
+  }
 }

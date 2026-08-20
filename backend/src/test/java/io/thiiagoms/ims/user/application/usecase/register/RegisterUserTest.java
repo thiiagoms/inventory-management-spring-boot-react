@@ -6,12 +6,6 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-
 import io.thiiagoms.ims.fixtures.user.domain.UserFake;
 import io.thiiagoms.ims.fixtures.user.infrastructure.persistence.repository.UserMemoryRepository;
 import io.thiiagoms.ims.shared.domain.identity.IdentityGenerator;
@@ -27,92 +21,87 @@ import io.thiiagoms.ims.user.domain.valueobject.Name;
 import io.thiiagoms.ims.user.domain.valueobject.PasswordHash;
 import io.thiiagoms.ims.user.domain.valueobject.PasswordPlain;
 import io.thiiagoms.ims.user.domain.valueobject.Phone;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 public class RegisterUserTest {
 
-    private RegisterUserData data;
+  private RegisterUserData data;
 
-    @Mock
-    private IdentityGenerator identityGenerator;
+  @Mock private IdentityGenerator identityGenerator;
 
-    @Mock
-    private PasswordEncoder passwordEncoder;
+  @Mock private PasswordEncoder passwordEncoder;
 
-    private UserRepository repository;
+  private UserRepository repository;
 
-    private UserUniqueness userUniqueness;
+  private UserUniqueness userUniqueness;
 
-    private RegisterUser useCase;
+  private RegisterUser useCase;
 
-    @BeforeEach
-    void setUp() {
-        this.data = new RegisterUserData(
+  @BeforeEach
+  void setUp() {
+    this.data =
+        new RegisterUserData(
             new Name("Peter Parker"),
             new Email("ilovephp@gmail.com"),
             new PasswordPlain("P4sSw0rd!!#)"),
-            new Phone("11999999999")
-        );
+            new Phone("11999999999"));
 
-        this.repository = new UserMemoryRepository();
-        this.userUniqueness = new UserUniqueness(repository);
-        this.useCase = new RegisterUser(
-            repository,
-            passwordEncoder,
-            userUniqueness,
-            identityGenerator
-        );
-    }
+    this.repository = new UserMemoryRepository();
+    this.userUniqueness = new UserUniqueness(repository);
+    this.useCase = new RegisterUser(repository, passwordEncoder, userUniqueness, identityGenerator);
+  }
 
-    @Test
-    void itRegistersAnUserAndReturnCreatedUserData() {
-        Id expectedGeneratedId = new Id("baa86496-638f-4beb-bc03-de2f7589ad63");
-        PasswordHash expectedPasswordHashed = new PasswordHash(
-            "$2y$12$YAZ54ki7cF3Oa/Em6/9WW.MwaAl65WbjV6nZl63qR9SqCmNBH5RT."
-        );
+  @Test
+  void itRegistersAnUserAndReturnCreatedUserData() {
+    Id expectedGeneratedId = new Id("baa86496-638f-4beb-bc03-de2f7589ad63");
+    PasswordHash expectedPasswordHashed =
+        new PasswordHash("$2y$12$YAZ54ki7cF3Oa/Em6/9WW.MwaAl65WbjV6nZl63qR9SqCmNBH5RT.");
 
-        when(this.identityGenerator.generate()).thenReturn(expectedGeneratedId);
-        when(this.passwordEncoder.encode(data.password())).thenReturn(expectedPasswordHashed);
+    when(this.identityGenerator.generate()).thenReturn(expectedGeneratedId);
+    when(this.passwordEncoder.encode(data.password())).thenReturn(expectedPasswordHashed);
 
-        var user = this.useCase.execute(data);
+    var user = this.useCase.execute(data);
 
-        assertEquals(expectedGeneratedId.value(), user.id());
-        assertEquals(data.name().value(), user.name());
-        assertEquals(data.email().value(), user.email());
-        assertEquals(data.phone().value(), user.phone());
-        assertEquals(Role.MANAGER.name(), user.role());
-    }
+    assertEquals(expectedGeneratedId.value(), user.id());
+    assertEquals(data.name().value(), user.name());
+    assertEquals(data.email().value(), user.email());
+    assertEquals(data.phone().value(), user.phone());
+    assertEquals(Role.MANAGER.name(), user.role());
+  }
 
-    @Test
-    void itRejectsAnEmailAlreadyOwnedByAnotherUser() {
-        repository.save(UserFake.start().withEmail(data.email()).build());
+  @Test
+  void itRejectsAnEmailAlreadyOwnedByAnotherUser() {
+    repository.save(UserFake.start().withEmail(data.email()).build());
 
-        EmailAlreadyExistsException exception = assertThrows(
-            EmailAlreadyExistsException.class,
-            () -> useCase.execute(data)
-        );
+    EmailAlreadyExistsException exception =
+        assertThrows(EmailAlreadyExistsException.class, () -> useCase.execute(data));
 
-        assertEquals(Email.FIELD, exception.getField());
-        assertEquals("An User with this e-mail already exists.", exception.getMessage());
+    assertEquals(Email.FIELD, exception.getField());
+    assertEquals("A user with this e-mail already exists.", exception.getMessage());
 
-        verify(identityGenerator, never()).generate();
-        verify(passwordEncoder, never()).encode(data.password());
-    }
+    verify(identityGenerator, never()).generate();
+    verify(passwordEncoder, never()).encode(data.password());
+  }
 
-    @Test
-    void itRejectsAPhoneAlreadyOwnedByAnotherUser() {
-        repository.save(UserFake.start()
-                .withEmail(new Email("another@example.com"))
-                .withPhone(data.phone())
-                .build());
+  @Test
+  void itRejectsAPhoneAlreadyOwnedByAnotherUser() {
+    repository.save(
+        UserFake.start()
+            .withEmail(new Email("another@example.com"))
+            .withPhone(data.phone())
+            .build());
 
-        PhoneAlreadyExistsException exception = assertThrows(
-                PhoneAlreadyExistsException.class,
-                () -> useCase.execute(data));
+    PhoneAlreadyExistsException exception =
+        assertThrows(PhoneAlreadyExistsException.class, () -> useCase.execute(data));
 
-        assertEquals(Phone.FIELD, exception.getField());
-        assertEquals("An User with this phone already exists.", exception.getMessage());
-        verify(identityGenerator, never()).generate();
-        verify(passwordEncoder, never()).encode(data.password());
-    }
+    assertEquals(Phone.FIELD, exception.getField());
+    assertEquals("A user with this phone already exists.", exception.getMessage());
+    verify(identityGenerator, never()).generate();
+    verify(passwordEncoder, never()).encode(data.password());
+  }
 }

@@ -6,19 +6,19 @@ import io.thiiagoms.ims.user.presentation.http.api.v1.register.RegisterUserReque
 
 public class UserApiTestSupport {
 
-    public static final String ENDPOINT = "/api/users";
+  public static final String ENDPOINT = "/api/users";
 
-    private final ApiTestSupport apiTestSupport;
+  private final ApiTestSupport apiTestSupport;
 
-    public UserApiTestSupport(ApiTestSupport apiTestSupport) {
-        this.apiTestSupport = apiTestSupport;
-    }
+  public UserApiTestSupport(ApiTestSupport apiTestSupport) {
+    this.apiTestSupport = apiTestSupport;
+  }
 
-    public String createUserAndReturnId() throws Exception {
-        return createUserAndReturnId(RegisterUserRequestBuilder.start().build());
-    }
+  public String createUserAndReturnId() throws Exception {
+    return createUserAndReturnId(RegisterUserRequestBuilder.start().build());
+  }
 
-    public String createUserAndReturnId(RegisterUserRequest request) throws Exception {
-        return apiTestSupport.postJsonAndReturnId(ENDPOINT, request);
-    }
+  public String createUserAndReturnId(RegisterUserRequest request) throws Exception {
+    return apiTestSupport.postJsonAndReturnId(ENDPOINT, request);
+  }
 }

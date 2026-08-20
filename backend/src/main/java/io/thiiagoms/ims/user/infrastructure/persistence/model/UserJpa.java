@@ -56,21 +56,15 @@ public class UserJpa {
   @Override
   public String toString() {
     return """
-        {
-          "id": "%s",
-          "name": "%s",
-          "email": "%s",
-          "phone": "%s",
-          "role": "%s",
-          "created_at": "%s"
-        }
+        {%n\
+          "id": "%s",%n\
+          "name": "%s",%n\
+          "email": "%s",%n\
+          "phone": "%s",%n\
+          "role": "%s",%n\
+          "created_at": "%s"%n\
+        }%n\
         """
-        .formatted(
-            this.id,
-            this.name,
-            this.email,
-            this.phone,
-            this.role,
-            this.createdAt);
+        .formatted(this.id, this.name, this.email, this.phone, this.role, this.createdAt);
   }
 }

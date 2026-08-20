@@ -5,11 +5,11 @@ import io.thiiagoms.ims.user.domain.valueobject.Phone;
 
 public final class PhoneAlreadyExistsException extends ResourceAlreadyExistsException {
 
-    private PhoneAlreadyExistsException(String message, String field) {
-        super(message, field);
-    }
+  private PhoneAlreadyExistsException(String message, String field) {
+    super(message, field);
+  }
 
-    public static PhoneAlreadyExistsException create() {
-        return new PhoneAlreadyExistsException("An User with this phone already exists.", Phone.FIELD);
-    }
+  public static PhoneAlreadyExistsException create() {
+    return new PhoneAlreadyExistsException("A user with this phone already exists.", Phone.FIELD);
+  }
 }

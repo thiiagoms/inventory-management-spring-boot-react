@@ -8,28 +8,28 @@ import io.thiiagoms.ims.user.domain.valueobject.Name;
 import io.thiiagoms.ims.user.domain.valueobject.PasswordHash;
 import io.thiiagoms.ims.user.domain.valueobject.Phone;
 import io.thiiagoms.ims.user.infrastructure.persistence.model.UserJpa;
+import java.util.UUID;
 
 public class UserMapper {
 
-    public static UserJpa toPersistence(User user) {
-        return UserJpa
-            .builder()
-            .name(user.name().value())
-            .email(user.email().value())
-            .password(user.password().value())
-            .phone(user.email().value())
-            .role(user.role().name())
-            .build();
-    }
+  public static UserJpa toPersistence(User user) {
+    return UserJpa.builder()
+        .id(UUID.fromString(user.id().value()))
+        .name(user.name().value())
+        .email(user.email().value())
+        .password(user.password().value())
+        .phone(user.phone().value())
+        .role(user.role().name())
+        .build();
+  }
 
-    public static User toDomain(UserJpa user) {
-        return User.rehydrate(
-            new Id(user.getId().toString()),
-            new Name(user.getName()),
-            new Email(user.getEmail()),
-            new Phone(user.getPhone()),
-            new PasswordHash(user.getPassword()),
-            Role.valueOf(user.getRole())
-        );
-    }
+  public static User toDomain(UserJpa user) {
+    return User.rehydrate(
+        new Id(user.getId().toString()),
+        new Name(user.getName()),
+        new Email(user.getEmail()),
+        new Phone(user.getPhone()),
+        new PasswordHash(user.getPassword()),
+        Role.valueOf(user.getRole()));
+  }
 }

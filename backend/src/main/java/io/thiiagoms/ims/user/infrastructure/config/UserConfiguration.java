@@ -1,34 +1,27 @@
 package io.thiiagoms.ims.user.infrastructure.config;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
 import io.thiiagoms.ims.shared.domain.identity.IdentityGenerator;
 import io.thiiagoms.ims.user.application.service.UserUniqueness;
 import io.thiiagoms.ims.user.application.usecase.register.RegisterUser;
 import io.thiiagoms.ims.user.domain.repository.UserRepository;
 import io.thiiagoms.ims.user.domain.security.PasswordEncoder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class UserConfiguration {
 
-    @Bean
-    UserUniqueness userUniqueness(UserRepository repository) {
-        return new UserUniqueness(repository);
-    }
+  @Bean
+  UserUniqueness userUniqueness(UserRepository repository) {
+    return new UserUniqueness(repository);
+  }
 
-    @Bean
-    RegisterUser registerUser(
-        UserRepository repository,
-        PasswordEncoder encoder,
-        UserUniqueness userUniqueness,
-        IdentityGenerator identityGenerator
-    ) {
-        return new RegisterUser(
-            repository,
-            encoder,
-            userUniqueness,
-            identityGenerator
-        );
-    }
+  @Bean
+  RegisterUser registerUser(
+      UserRepository repository,
+      PasswordEncoder encoder,
+      UserUniqueness userUniqueness,
+      IdentityGenerator identityGenerator) {
+    return new RegisterUser(repository, encoder, userUniqueness, identityGenerator);
+  }
 }

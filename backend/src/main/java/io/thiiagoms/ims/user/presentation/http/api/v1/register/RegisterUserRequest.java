@@ -9,29 +9,16 @@ import io.thiiagoms.ims.user.domain.valueobject.Phone;
 import jakarta.validation.constraints.NotBlank;
 
 public record RegisterUserRequest(
+    @NotBlank @Schema(example = "John Doe") String name,
+    @NotBlank @Schema(example = "john.doe@gmail.com") String email,
+    @NotBlank @Schema(example = "Strong@123") String password,
     @NotBlank
-    @Schema(example = "John Doe")
-    String name,
-
-    @NotBlank
-    @Schema(example = "john.doe@gmail.com")
-    String email,
-
-    @NotBlank
-    @Schema(example = "Strong@123")
-    String password,
-
-    @NotBlank
-    @Schema(description = "Brazilian phone with a two-digit area code. Formatting is optional.", example = "(11) 99999-9999")
-    String phone
-) {
-    public RegisterUserData toCommand() {
-        return new RegisterUserData(
-            new Name(name),
-            new Email(email),
-            new PasswordPlain(password),
-            new Phone(phone)
-        );
-    }
+        @Schema(
+            description = "Brazilian phone with a two-digit area code. Formatting is optional.",
+            example = "(11) 99999-9999")
+        String phone) {
+  public RegisterUserData toCommand() {
+    return new RegisterUserData(
+        new Name(name), new Email(email), new PasswordPlain(password), new Phone(phone));
+  }
 }
-

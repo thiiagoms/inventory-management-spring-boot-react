@@ -1,8 +1,8 @@
 package io.thiiagoms.ims.user.domain;
 
 public enum Role {
-    ADMIN,
-    MANAGER;
+  ADMIN,
+  MANAGER;
 
-    public static final String FIELD = "role";
+  public static final String FIELD = "role";
 }

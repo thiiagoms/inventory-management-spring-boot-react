@@ -1,14 +1,13 @@
 package io.thiiagoms.ims.user.infrastructure.persistence.repository;
 
+import io.thiiagoms.ims.user.infrastructure.persistence.model.UserJpa;
 import java.util.Optional;
-
+import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import io.thiiagoms.ims.user.infrastructure.persistence.model.UserJpa;
+public interface UserJpaRepository extends JpaRepository<UserJpa, UUID> {
 
-public interface UserJpaRepository extends JpaRepository<UserJpa, String> {
+  Optional<UserJpa> findByEmail(String email);
 
-    Optional<UserJpa> findByEmail(String email);
-
-    Optional<UserJpa> findByPhone(String phone);
+  Optional<UserJpa> findByPhone(String phone);
 }

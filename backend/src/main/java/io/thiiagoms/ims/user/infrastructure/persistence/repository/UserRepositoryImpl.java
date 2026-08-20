@@ -1,53 +1,46 @@
 package io.thiiagoms.ims.user.infrastructure.persistence.repository;
 
-import java.util.Optional;
-
-import org.springframework.stereotype.Repository;
-
 import io.thiiagoms.ims.shared.domain.valueobject.Id;
 import io.thiiagoms.ims.user.domain.User;
 import io.thiiagoms.ims.user.domain.repository.UserRepository;
 import io.thiiagoms.ims.user.domain.valueobject.Email;
 import io.thiiagoms.ims.user.domain.valueobject.Phone;
+import io.thiiagoms.ims.user.infrastructure.persistence.mapper.UserMapper;
+import java.util.Optional;
+import java.util.UUID;
+import org.springframework.stereotype.Repository;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
 
-    private final UserJpaRepository repository;
+  private final UserJpaRepository repository;
 
-    public UserRepositoryImpl(UserJpaRepository repository) {
-        this.repository = repository;
-    }
+  public UserRepositoryImpl(UserJpaRepository repository) {
+    this.repository = repository;
+  }
 
-    @Override
-    public Optional<User> findById(Id id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findById'");
-    }
+  @Override
+  public Optional<User> findById(Id id) {
+    return repository.findById(UUID.fromString(id.value())).map(UserMapper::toDomain);
+  }
 
-    @Override
-    public Optional<User> findByEmail(Email email) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findByEmail'");
-    }
+  @Override
+  public Optional<User> findByEmail(Email email) {
+    return repository.findByEmail(email.value()).map(UserMapper::toDomain);
+  }
 
-    @Override
-    public Optional<User> findByPhone(Phone phone) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findByPhone'");
-    }
+  @Override
+  public Optional<User> findByPhone(Phone phone) {
+    return repository.findByPhone(phone.value()).map(UserMapper::toDomain);
+  }
 
-    @Override
-    public void save(User user) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'save'");
-    }
+  @Override
+  public void save(User user) {
+    repository.save(UserMapper.toPersistence(user));
+  }
 
-    @Override
-    public void destroy(Id id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'destroy'");
-    }
-
-    
+  @Override
+  public void destroy(Id id) {
+    repository.deleteById(UUID.fromString(id.value()));
+  }
 }
