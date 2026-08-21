@@ -5,13 +5,11 @@ import io.thiiagoms.ims.shared.domain.valueobject.Id;
 
 public class UserNotChangedException extends ApplicationException {
 
-    protected UserNotChangedException(String message, String field) {
-        super(message, field);
-    }
+  protected UserNotChangedException(String message, String field) {
+    super(message, field);
+  }
 
-    public static UserNotChangedException create() {
-        return new UserNotChangedException(
-                "No changes were detected for the user.",
-                Id.FIELD);
-    }
+  public static UserNotChangedException create() {
+    return new UserNotChangedException("No changes were detected for the user.", Id.FIELD);
+  }
 }
