@@ -26,9 +26,10 @@ spotbugs:
 	cd $(BACKEND_DIR) && $(MVNW) -DskipTests compile spotbugs:check
 
 architecture:
-	cd $(BACKEND_DIR) && $(MVNW) -Dtest='io.thiiagoms.backend.shared.architecture.*Test' test
+	cd $(BACKEND_DIR) && $(MVNW) -Dtest='io.thiiagoms.ims.ArchitectureTest' test
 
-quality: format-check checkstyle spotbugs architecture
+quality:
+	@$(MAKE) --keep-going format-check checkstyle spotbugs architecture
 
 verify:
 	cd $(BACKEND_DIR) && $(MVNW) verify
