@@ -1,6 +1,6 @@
 package io.thiiagoms.ims.fixtures.user.presentation.http.api.v1.register;
 
-import io.thiiagoms.ims.user.presentation.http.api.v1.register.RegisterUserRequest;
+import io.thiiagoms.ims.user.presentation.http.api.v1.register.RegisterRequest;
 
 public class RegisterUserRequestBuilder {
 
@@ -43,7 +43,7 @@ public class RegisterUserRequestBuilder {
     return this;
   }
 
-  public RegisterUserRequest build() {
-    return new RegisterUserRequest(name, email, password, phone);
+  public RegisterRequest build() {
+    return new RegisterRequest(name, email, password, phone);
   }
 }

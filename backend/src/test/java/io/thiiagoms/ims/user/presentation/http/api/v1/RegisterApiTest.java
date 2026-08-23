@@ -1,4 +1,4 @@
-package io.thiiagoms.ims.user.presentation.http.api.v1.register;
+package io.thiiagoms.ims.user.presentation.http.api.v1;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -18,14 +18,14 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
 
-public class RegisterUserApiTest extends ApiTestSupport {
+public class RegisterApiTest extends ApiTestSupport {
 
   private final UserApiTestSupport apiTestSupport;
 
   private final UserJpaRepository repository;
 
   @Autowired
-  public RegisterUserApiTest(MockMvc mockMvc, UserJpaRepository repository) {
+  public RegisterApiTest(MockMvc mockMvc, UserJpaRepository repository) {
     super(mockMvc);
     this.repository = repository;
     this.apiTestSupport = new UserApiTestSupport(this);
@@ -203,6 +203,7 @@ public class RegisterUserApiTest extends ApiTestSupport {
   }
 
   private static String invalidPasswordMessage() {
-    return "Password must be at least 8 characters and include uppercase, lowercase, digit, and special character.";
+    return "Password must be at least 8 characters and include uppercase, lowercase, digit, "
+        + "and special character.";
   }
 }

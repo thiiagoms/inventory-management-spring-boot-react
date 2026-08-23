@@ -2,7 +2,7 @@ package io.thiiagoms.ims.fixtures.user.presentation.http.api.v1;
 
 import io.thiiagoms.ims.fixtures.shared.presentation.http.ApiTestSupport;
 import io.thiiagoms.ims.fixtures.user.presentation.http.api.v1.register.RegisterUserRequestBuilder;
-import io.thiiagoms.ims.user.presentation.http.api.v1.register.RegisterUserRequest;
+import io.thiiagoms.ims.user.presentation.http.api.v1.register.RegisterRequest;
 
 public class UserApiTestSupport {
 
@@ -18,7 +18,7 @@ public class UserApiTestSupport {
     return createUserAndReturnId(RegisterUserRequestBuilder.start().build());
   }
 
-  public String createUserAndReturnId(RegisterUserRequest request) throws Exception {
+  public String createUserAndReturnId(RegisterRequest request) throws Exception {
     return apiTestSupport.postJsonAndReturnId(ENDPOINT, request);
   }
 }

@@ -9,7 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.thiiagoms.ims.shared.presentation.http.exception.ErrorResponse;
 import io.thiiagoms.ims.user.application.usecase.register.RegisterUser;
-import io.thiiagoms.ims.user.presentation.http.api.v1.BaseUserApiController;
+import io.thiiagoms.ims.user.presentation.http.api.v1.UserController;
 import io.thiiagoms.ims.user.presentation.http.api.v1.shared.response.UserResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -20,12 +20,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@Tag(name = "Users", description = "User management operations")
-public class RegisterUserApiController implements BaseUserApiController {
+@Tag(name = "Users", description = "User store operation")
+public class RegisterController implements UserController {
 
   private final RegisterUser useCase;
 
-  RegisterUserApiController(RegisterUser useCase) {
+  RegisterController(RegisterUser useCase) {
     this.useCase = useCase;
   }
 
@@ -35,10 +35,11 @@ public class RegisterUserApiController implements BaseUserApiController {
       summary = "Register A user",
       description =
           """
-                        Creates an manager user user. The name, e-mail, and phone are normalized; both e-mail and
-                        phone must be unique. The password is hashed before persistence and must contain at least eight
-                        characters, including uppercase, lowercase, numeric, and special characters.
-                        """)
+          Creates a manager user. The name, e-mail, and phone are normalized; both e-mail and
+          phone must be unique. The password is hashed before persistence and must contain at
+          least eight characters, including uppercase, lowercase, numeric, and special
+          characters.
+          """)
   @ApiResponses({
     @ApiResponse(
         responseCode = "201",
@@ -96,7 +97,7 @@ public class RegisterUserApiController implements BaseUserApiController {
                                         }
                                         """)))
   })
-  public UserResponse store(@Valid @RequestBody RegisterUserRequest request) {
+  public UserResponse store(@Valid @RequestBody RegisterRequest request) {
     var user = useCase.execute(request.toCommand());
     return UserResponse.from(user);
   }

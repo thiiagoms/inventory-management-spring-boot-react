@@ -8,7 +8,7 @@ import io.thiiagoms.ims.user.domain.valueobject.PasswordPlain;
 import io.thiiagoms.ims.user.domain.valueobject.Phone;
 import jakarta.validation.constraints.NotBlank;
 
-public record RegisterUserRequest(
+public record RegisterRequest(
     @NotBlank @Schema(example = "John Doe") String name,
     @NotBlank @Schema(example = "john.doe@gmail.com") String email,
     @NotBlank @Schema(example = "Strong@123") String password,
