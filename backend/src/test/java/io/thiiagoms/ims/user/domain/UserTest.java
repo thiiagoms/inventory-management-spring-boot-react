@@ -1,13 +1,16 @@
 package io.thiiagoms.ims.user.domain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import io.thiiagoms.ims.fixtures.user.domain.UserFake;
 import io.thiiagoms.ims.shared.domain.valueobject.Id;
+import io.thiiagoms.ims.shared.domain.valueobject.Timestamp;
 import io.thiiagoms.ims.user.domain.valueobject.Email;
 import io.thiiagoms.ims.user.domain.valueobject.Name;
 import io.thiiagoms.ims.user.domain.valueobject.PasswordHash;
 import io.thiiagoms.ims.user.domain.valueobject.Phone;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
 public class UserTest {
@@ -28,6 +31,7 @@ public class UserTest {
     assertEquals(phone, user.phone());
     assertEquals(password, user.password());
     assertEquals(Role.MANAGER, user.role());
+    assertTrue(user.lastLoginAt().isEmpty());
   }
 
   @Test
@@ -37,8 +41,10 @@ public class UserTest {
     var email = new Email("ilovelaravel@gmail.com");
     var phone = new Phone("11999999999");
     var password = new PasswordHash("$2y$12$iF6w435uv0afaojVWrI4Lu8mc0FU.Oyp9BlTQcqCIDcnXbd0rz4sS");
+    var lastLoginAt = new Timestamp("2026-08-21T12:00:00Z");
 
-    User user = User.rehydrate(id, name, email, phone, password, Role.ADMIN);
+    User user =
+        User.rehydrate(id, name, email, phone, password, Role.ADMIN, Optional.of(lastLoginAt));
 
     assertEquals(id, user.id());
     assertEquals(name, user.name());
@@ -46,6 +52,17 @@ public class UserTest {
     assertEquals(phone, user.phone());
     assertEquals(password, user.password());
     assertEquals(Role.ADMIN, user.role());
+    assertEquals(lastLoginAt, user.lastLoginAt().orElseThrow());
+  }
+
+  @Test
+  void itRecordsTheLastSuccessfulLogin() {
+    var user = UserFake.start().build();
+    var authenticatedAt = new Timestamp("2026-08-21T12:00:00Z");
+
+    user.recordLoginAt(authenticatedAt);
+
+    assertEquals(authenticatedAt, user.lastLoginAt().orElseThrow());
   }
 
   @Test

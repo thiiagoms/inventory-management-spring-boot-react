@@ -2,12 +2,16 @@ package io.thiiagoms.ims.user.domain;
 
 import io.thiiagoms.ims.shared.domain.support.Guard;
 import io.thiiagoms.ims.shared.domain.valueobject.Id;
+import io.thiiagoms.ims.shared.domain.valueobject.Timestamp;
 import io.thiiagoms.ims.user.domain.valueobject.Email;
 import io.thiiagoms.ims.user.domain.valueobject.Name;
 import io.thiiagoms.ims.user.domain.valueobject.PasswordHash;
 import io.thiiagoms.ims.user.domain.valueobject.Phone;
+import java.util.Optional;
 
 public class User {
+
+  private static final String LAST_LOGIN_AT_FIELD = "last_login_at";
 
   private final Id id;
 
@@ -21,28 +25,50 @@ public class User {
 
   private final Role role;
 
-  private User(Id id, Name name, Email email, Phone phone, PasswordHash password, Role role) {
+  private Optional<Timestamp> lastLoginAt;
+
+  private User(
+      Id id,
+      Name name,
+      Email email,
+      Phone phone,
+      PasswordHash password,
+      Role role,
+      Optional<Timestamp> lastLoginAt) {
     Guard.againstNull(Id.FIELD, id);
     Guard.againstNull(Name.FIELD, name);
     Guard.againstNull(Email.FIELD, email);
     Guard.againstNull(Phone.FIELD, phone);
     Guard.againstNull(PasswordHash.FIELD, password);
     Guard.againstNull(Role.FIELD, role);
+    Guard.againstNull(LAST_LOGIN_AT_FIELD, lastLoginAt);
     this.id = id;
     this.name = name;
     this.email = email;
     this.phone = phone;
     this.password = password;
     this.role = role;
+    this.lastLoginAt = lastLoginAt;
   }
 
   public static User register(Id id, Name name, Email email, Phone phone, PasswordHash password) {
-    return new User(id, name, email, phone, password, Role.MANAGER);
+    return new User(id, name, email, phone, password, Role.MANAGER, Optional.empty());
   }
 
   public static User rehydrate(
       Id id, Name name, Email email, Phone phone, PasswordHash password, Role role) {
-    return new User(id, name, email, phone, password, role);
+    return rehydrate(id, name, email, phone, password, role, Optional.empty());
+  }
+
+  public static User rehydrate(
+      Id id,
+      Name name,
+      Email email,
+      Phone phone,
+      PasswordHash password,
+      Role role,
+      Optional<Timestamp> lastLoginAt) {
+    return new User(id, name, email, phone, password, role, lastLoginAt);
   }
 
   public Id id() {
@@ -67,6 +93,15 @@ public class User {
 
   public Role role() {
     return role;
+  }
+
+  public Optional<Timestamp> lastLoginAt() {
+    return lastLoginAt;
+  }
+
+  public void recordLoginAt(Timestamp authenticatedAt) {
+    Guard.againstNull(Timestamp.FIELD, authenticatedAt);
+    lastLoginAt = Optional.of(authenticatedAt);
   }
 
   public void changeNameTo(Name name) {

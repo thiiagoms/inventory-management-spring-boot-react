@@ -1,12 +1,14 @@
 package io.thiiagoms.ims.fixtures.user.domain;
 
 import io.thiiagoms.ims.shared.domain.valueobject.Id;
+import io.thiiagoms.ims.shared.domain.valueobject.Timestamp;
 import io.thiiagoms.ims.user.domain.Role;
 import io.thiiagoms.ims.user.domain.User;
 import io.thiiagoms.ims.user.domain.valueobject.Email;
 import io.thiiagoms.ims.user.domain.valueobject.Name;
 import io.thiiagoms.ims.user.domain.valueobject.PasswordHash;
 import io.thiiagoms.ims.user.domain.valueobject.Phone;
+import java.util.Optional;
 
 public class UserFake {
 
@@ -22,6 +24,8 @@ public class UserFake {
 
   private Role role;
 
+  private Optional<Timestamp> lastLoginAt;
+
   private UserFake() {
     id = new Id("eaf16b7a-a0f9-4bb7-b57a-b91991c0710c");
     name = new Name("Matt Murdock");
@@ -29,6 +33,7 @@ public class UserFake {
     password = new PasswordHash("$2y$12$Mn6Kd4NcVsubXdHG8uIdDOIoLfpbqR/vHayPRLjPzNSGTUzpshrvi");
     phone = new Phone("11999999999");
     role = Role.MANAGER;
+    lastLoginAt = Optional.empty();
   }
 
   public static UserFake start() {
@@ -65,7 +70,12 @@ public class UserFake {
     return this;
   }
 
+  public UserFake withLastLoginAt(Timestamp lastLoginAt) {
+    this.lastLoginAt = Optional.of(lastLoginAt);
+    return this;
+  }
+
   public User build() {
-    return User.rehydrate(id, name, email, phone, password, role);
+    return User.rehydrate(id, name, email, phone, password, role, lastLoginAt);
   }
 }

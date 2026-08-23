@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -50,8 +51,11 @@ public class UserJpa {
   @OneToMany(mappedBy = "user")
   private List<Transaction> transactions;
 
-  @Column(name = "created_at")
+  @Column(name = "created_at", updatable = false)
   private final LocalDateTime createdAt = LocalDateTime.now();
+
+  @Column(name = "last_login_at")
+  private Instant lastLoginAt;
 
   @Override
   public String toString() {
@@ -62,9 +66,17 @@ public class UserJpa {
           "email": "%s",%n\
           "phone": "%s",%n\
           "role": "%s",%n\
-          "created_at": "%s"%n\
+          "created_at": "%s",%n\
+          "last_login_at": "%s"%n\
         }%n\
         """
-        .formatted(this.id, this.name, this.email, this.phone, this.role, this.createdAt);
+        .formatted(
+            this.id,
+            this.name,
+            this.email,
+            this.phone,
+            this.role,
+            this.createdAt,
+            this.lastLoginAt);
   }
 }
