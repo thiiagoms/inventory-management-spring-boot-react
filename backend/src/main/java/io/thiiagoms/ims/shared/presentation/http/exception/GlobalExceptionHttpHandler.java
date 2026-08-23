@@ -136,12 +136,12 @@ public class GlobalExceptionHttpHandler {
     ErrorResponse response =
         new ErrorResponse(
             Instant.now(),
-            HttpStatus.UNPROCESSABLE_ENTITY.value(),
+            HttpStatus.UNPROCESSABLE_CONTENT.value(),
             "resource_not_changed",
             exception.getField(),
             exception.getMessage());
 
-    return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(response);
+    return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT).body(response);
   }
 
   @ExceptionHandler(RuntimeException.class)
