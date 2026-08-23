@@ -6,6 +6,7 @@ import io.thiiagoms.ims.user.application.service.UserFinder;
 import io.thiiagoms.ims.user.application.service.UserUniqueness;
 import io.thiiagoms.ims.user.application.usecase.auth.authenticate.Authenticate;
 import io.thiiagoms.ims.user.application.usecase.register.RegisterUser;
+import io.thiiagoms.ims.user.application.usecase.update.UpdateUser;
 import io.thiiagoms.ims.user.domain.repository.UserRepository;
 import io.thiiagoms.ims.user.domain.security.PasswordEncoder;
 import io.thiiagoms.ims.user.domain.security.TokenIssuer;
@@ -42,5 +43,14 @@ public class UserConfiguration {
       PasswordEncoder encoder,
       Clock clock) {
     return new Authenticate(userFinder, tokenIssuer, repository, encoder, clock);
+  }
+
+  @Bean
+  UpdateUser updateUser(
+      UserFinder userFinder,
+      PasswordEncoder encoder,
+      UserRepository repository,
+      UserUniqueness userUniqueness) {
+    return new UpdateUser(userFinder, encoder, repository, userUniqueness);
   }
 }
