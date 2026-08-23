@@ -3,6 +3,7 @@ package io.thiiagoms.ims.shared.presentation.http.exception;
 import io.thiiagoms.ims.shared.application.exception.NotFoundException;
 import io.thiiagoms.ims.shared.application.exception.ResourceAlreadyExistsException;
 import io.thiiagoms.ims.shared.domain.exception.AuthorizationFailedException;
+import io.thiiagoms.ims.shared.domain.exception.ForbiddenAccessException;
 import io.thiiagoms.ims.shared.domain.exception.InvalidDomainArgumentException;
 import java.time.Instant;
 import org.springframework.http.HttpStatus;
@@ -81,8 +82,21 @@ public class GlobalExceptionHttpHandler {
     ErrorResponse response =
         new ErrorResponse(
             Instant.now(),
-            HttpStatus.FORBIDDEN.value(),
+            HttpStatus.UNAUTHORIZED.value(),
             "authorization_failed",
+            exception.getField(),
+            exception.getMessage());
+
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+  }
+
+  @ExceptionHandler(ForbiddenAccessException.class)
+  public ResponseEntity<ErrorResponse> handleForbiddenAccess(ForbiddenAccessException exception) {
+    ErrorResponse response =
+        new ErrorResponse(
+            Instant.now(),
+            HttpStatus.FORBIDDEN.value(),
+            "forbidden_access",
             exception.getField(),
             exception.getMessage());
 
