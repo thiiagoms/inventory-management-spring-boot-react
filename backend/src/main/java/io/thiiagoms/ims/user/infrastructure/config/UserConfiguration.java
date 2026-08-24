@@ -5,6 +5,7 @@ import io.thiiagoms.ims.shared.domain.time.Clock;
 import io.thiiagoms.ims.user.application.service.UserFinder;
 import io.thiiagoms.ims.user.application.service.UserUniqueness;
 import io.thiiagoms.ims.user.application.usecase.auth.authenticate.Authenticate;
+import io.thiiagoms.ims.user.application.usecase.destroy.DestroyUser;
 import io.thiiagoms.ims.user.application.usecase.register.RegisterUser;
 import io.thiiagoms.ims.user.application.usecase.update.UpdateUser;
 import io.thiiagoms.ims.user.domain.repository.UserRepository;
@@ -52,5 +53,10 @@ public class UserConfiguration {
       UserRepository repository,
       UserUniqueness userUniqueness) {
     return new UpdateUser(userFinder, encoder, repository, userUniqueness);
+  }
+
+  @Bean
+  DestroyUser destroyUser(UserFinder finder, UserRepository repository) {
+    return new DestroyUser(finder, repository);
   }
 }
