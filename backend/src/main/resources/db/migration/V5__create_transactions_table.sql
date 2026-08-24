@@ -9,7 +9,7 @@ CREATE TABLE transactions (
     created_at DATETIME(6),
     updated_at DATETIME(6),
     product_id BIGINT,
-    user_id BIGINT,
+    user_id BINARY(16),
     supplier_id BIGINT,
     CONSTRAINT pk_transactions PRIMARY KEY (id),
     CONSTRAINT fk_transactions_product

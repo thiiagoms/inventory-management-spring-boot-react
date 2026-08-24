@@ -3,10 +3,13 @@ package io.thiiagoms.ims.shared.presentation.http.exception;
 import io.thiiagoms.ims.shared.application.exception.NotFoundException;
 import io.thiiagoms.ims.shared.application.exception.ResourceAlreadyExistsException;
 import io.thiiagoms.ims.shared.domain.exception.AuthorizationFailedException;
+import io.thiiagoms.ims.shared.domain.exception.ForbiddenAccessException;
 import io.thiiagoms.ims.shared.domain.exception.InvalidDomainArgumentException;
+import io.thiiagoms.ims.user.application.exception.UserNotChangedException;
 import java.time.Instant;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -81,10 +84,36 @@ public class GlobalExceptionHttpHandler {
     ErrorResponse response =
         new ErrorResponse(
             Instant.now(),
-            HttpStatus.FORBIDDEN.value(),
+            HttpStatus.UNAUTHORIZED.value(),
             "authorization_failed",
             exception.getField(),
             exception.getMessage());
+
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+  }
+
+  @ExceptionHandler(ForbiddenAccessException.class)
+  public ResponseEntity<ErrorResponse> handleForbiddenAccess(ForbiddenAccessException exception) {
+    ErrorResponse response =
+        new ErrorResponse(
+            Instant.now(),
+            HttpStatus.FORBIDDEN.value(),
+            "forbidden_access",
+            exception.getField(),
+            exception.getMessage());
+
+    return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+  }
+
+  @ExceptionHandler(AccessDeniedException.class)
+  public ResponseEntity<ErrorResponse> handleAccessDenied(AccessDeniedException exception) {
+    ErrorResponse response =
+        new ErrorResponse(
+            Instant.now(),
+            HttpStatus.FORBIDDEN.value(),
+            "forbidden_access",
+            "authorization",
+            "You cannot access another user's profile.");
 
     return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
   }
@@ -100,6 +129,19 @@ public class GlobalExceptionHttpHandler {
             exception.getMessage());
 
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+  }
+
+  @ExceptionHandler(UserNotChangedException.class)
+  ResponseEntity<ErrorResponse> handleUserNotChanged(UserNotChangedException exception) {
+    ErrorResponse response =
+        new ErrorResponse(
+            Instant.now(),
+            HttpStatus.UNPROCESSABLE_CONTENT.value(),
+            "resource_not_changed",
+            exception.getField(),
+            exception.getMessage());
+
+    return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT).body(response);
   }
 
   @ExceptionHandler(RuntimeException.class)

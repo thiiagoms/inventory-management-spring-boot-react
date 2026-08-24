@@ -39,7 +39,8 @@ public class GuardTest {
 
   @ParameterizedTest(
       name =
-          "[{index}] againstNullOrEmptyOrBlank() should throw when value is null, empty or blank: [{0}]")
+          "[{index}] againstNullOrEmptyOrBlank() should throw when value is null, "
+              + "empty or blank: [{0}]")
   @NullAndEmptySource
   @ValueSource(strings = {" ", "   "})
   void againstNullOrEmptyOrBlankShouldThrowWhenValueIsNullEmptyOrBlank(String value) {

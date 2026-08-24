@@ -16,3 +16,7 @@ spring:
     multipart:
       max-file-size: 2GB
       max-request-size: 2GB
+
+jwt:
+  secret: ${JWT_SECRET}
+  ttl-minutes: ${JWT_TTL_MINUTES}
