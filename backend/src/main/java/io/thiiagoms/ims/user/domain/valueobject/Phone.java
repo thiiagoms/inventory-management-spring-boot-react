@@ -43,7 +43,7 @@ public record Phone(String value) implements Formatted {
 
   private void validateAllowedCharacters(String phone) {
     if (!ALLOWED_CHARACTERS.matcher(phone).matches()) {
-      fail("Phone must contain only numbers and formatting characters.");
+      throw fail("Phone must contain only numbers and formatting characters.");
     }
   }
 
@@ -52,11 +52,11 @@ public record Phone(String value) implements Formatted {
     int phoneLength = phone.length();
 
     if (phoneLength != LANDLINE_LENGTH && phoneLength != MOBILE_LENGTH) {
-      fail("Phone must contain 10 or 11 digits.");
+      throw fail("Phone must contain 10 or 11 digits.");
     }
   }
 
-  private void fail(String message) {
-    throw InvalidDomainArgumentException.with(message, FIELD);
+  private InvalidDomainArgumentException fail(String message) {
+    return InvalidDomainArgumentException.with(message, FIELD);
   }
 }

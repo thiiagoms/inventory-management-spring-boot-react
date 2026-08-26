@@ -37,7 +37,7 @@ public record Name(String value) {
       return;
     }
 
-    fail("Name could not be normalized due to invalid UTF-8 input.");
+    throw fail("Name could not be normalized due to invalid UTF-8 input.");
   }
 
   private String toTitleCase(String source) {
@@ -91,7 +91,7 @@ public record Name(String value) {
       return;
     }
 
-    fail("Name must contain only letters, spaces, apostrophes, dots, and hyphens.");
+    throw fail("Name must contain only letters, spaces, apostrophes, dots, and hyphens.");
   }
 
   private void ensureNameLengthIsValid(String name) {
@@ -101,12 +101,11 @@ public record Name(String value) {
       return;
     }
 
-    String message =
-        "Name value must be between %d and %d characters long.".formatted(MIN_LENGTH, MAX_LENGTH);
-    fail(message);
+    throw fail(
+        "Name value must be between %d and %d characters long.".formatted(MIN_LENGTH, MAX_LENGTH));
   }
 
-  private void fail(String message) {
-    throw InvalidDomainArgumentException.with(message, FIELD);
+  private InvalidDomainArgumentException fail(String message) {
+    return InvalidDomainArgumentException.with(message, FIELD);
   }
 }

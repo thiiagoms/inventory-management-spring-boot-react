@@ -23,11 +23,11 @@ public record Email(String value) {
 
   private void validate(String value) {
     if (!EMAIL_PATTERN.matcher(value).matches()) {
-      fail("Invalid e-mail address.");
+      throw fail("Invalid e-mail address.");
     }
   }
 
-  private void fail(String message) {
-    throw InvalidDomainArgumentException.with(message, FIELD);
+  private InvalidDomainArgumentException fail(String message) {
+    return InvalidDomainArgumentException.with(message, FIELD);
   }
 }
