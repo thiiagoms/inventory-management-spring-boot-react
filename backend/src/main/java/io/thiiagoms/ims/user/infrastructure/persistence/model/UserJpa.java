@@ -1,32 +1,25 @@
 package io.thiiagoms.ims.user.infrastructure.persistence.model;
 
 import io.thiiagoms.ims.models.Transaction;
+import io.thiiagoms.ims.shared.infrastructure.persistence.model.BaseJpaEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
-@Data
-@Builder
+@Getter
+@SuperBuilder
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "users")
-public class UserJpa {
-
-  @Id
-  @Column(name = "id", columnDefinition = "BINARY(16)")
-  private UUID id;
+public class UserJpa extends BaseJpaEntity {
 
   @NotBlank(message = "Name is required.")
   @Column(name = "name", nullable = false)
@@ -51,9 +44,6 @@ public class UserJpa {
   @OneToMany(mappedBy = "user")
   private List<Transaction> transactions;
 
-  @Column(name = "created_at", updatable = false)
-  private final LocalDateTime createdAt = LocalDateTime.now();
-
   @Column(name = "last_login_at")
   private Instant lastLoginAt;
 
@@ -71,12 +61,12 @@ public class UserJpa {
         }%n\
         """
         .formatted(
-            this.id,
+            this.getId(),
             this.name,
             this.email,
             this.phone,
             this.role,
-            this.createdAt,
+            this.getCreatedAt(),
             this.lastLoginAt);
   }
 }
