@@ -23,7 +23,7 @@ public record PasswordPlain(String value) {
       var message =
           "Password must be at least 8 characters and include uppercase, lowercase,"
               + " digit, and special character.";
-      fail(message);
+      throw fail(message);
     }
   }
 
@@ -40,7 +40,7 @@ public record PasswordPlain(String value) {
     return "{*******************}";
   }
 
-  private void fail(String message) {
-    throw InvalidDomainArgumentException.with(message, FIELD);
+  private InvalidDomainArgumentException fail(String message) {
+    return InvalidDomainArgumentException.with(message, FIELD);
   }
 }

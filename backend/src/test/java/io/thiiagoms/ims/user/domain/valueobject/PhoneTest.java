@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import io.thiiagoms.ims.shared.domain.exception.InvalidDomainArgumentException;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -18,6 +19,20 @@ class PhoneTest {
   })
   void shouldNormalizeValidPhone(String value, String expected) {
     assertEquals(expected, new Phone(value).value());
+  }
+
+  @Test
+  void shouldFormatMobilePhone() {
+    Phone phone = new Phone("11987654321");
+
+    assertEquals("(11) 98765-4321", phone.formatted());
+  }
+
+  @Test
+  void shouldFormatLandlinePhone() {
+    Phone phone = new Phone("1134567890");
+
+    assertEquals("(11) 3456-7890", phone.formatted());
   }
 
   @ParameterizedTest

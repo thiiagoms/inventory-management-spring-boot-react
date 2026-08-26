@@ -17,7 +17,7 @@ public record PasswordHash(String value) {
         value.startsWith("$2a$") || value.startsWith("$2b$") || value.startsWith("$2y$");
 
     if (!valid) {
-      fail("Invalid password hash.");
+      throw fail("Invalid password hash.");
     }
   }
 
@@ -26,7 +26,7 @@ public record PasswordHash(String value) {
     return "{*******************}";
   }
 
-  private void fail(String message) {
-    throw InvalidDomainArgumentException.with(message, FIELD);
+  private InvalidDomainArgumentException fail(String message) {
+    return InvalidDomainArgumentException.with(message, FIELD);
   }
 }

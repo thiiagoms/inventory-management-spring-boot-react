@@ -72,6 +72,18 @@ public class NameTest {
         exception.getMessage());
   }
 
+  @Test
+  void shouldThrowWhenNameCannotBeEncodedAsUtf8() {
+    String value = "John \uD800 Doe";
+
+    InvalidDomainArgumentException exception =
+        assertThrows(InvalidDomainArgumentException.class, () -> new Name(value));
+
+    assertEquals(Name.FIELD, exception.getField());
+    assertEquals(
+        "Name could not be normalized due to invalid UTF-8 input.", exception.getMessage());
+  }
+
   @ParameterizedTest(name = "[{index}] should throw when name length is invalid: {0}")
   @ValueSource(strings = {"Ab"})
   void shouldThrowWhenNameLengthIsInvalidBelowMinimum(String value) {
