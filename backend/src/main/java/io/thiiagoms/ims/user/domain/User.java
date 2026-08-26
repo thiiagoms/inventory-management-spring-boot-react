@@ -56,11 +56,6 @@ public class User {
   }
 
   public static User rehydrate(
-      Id id, Name name, Email email, Phone phone, PasswordHash password, Role role) {
-    return rehydrate(id, name, email, phone, password, role, Optional.empty());
-  }
-
-  public static User rehydrate(
       Id id,
       Name name,
       Email email,
