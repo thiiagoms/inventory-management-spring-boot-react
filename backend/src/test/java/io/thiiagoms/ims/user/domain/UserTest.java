@@ -1,6 +1,7 @@
 package io.thiiagoms.ims.user.domain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import io.thiiagoms.ims.fixtures.user.domain.UserFake;
@@ -115,6 +116,17 @@ public class UserTest {
 
     user.changeEmailTo(email);
     assertEquals(email, user.email());
+  }
+
+  @Test
+  void itDoesNotChangeTheUserPhoneWhenItIsUnchanged() {
+    var currentPhone = new Phone("11999999999");
+    var equivalentPhone = new Phone("(11) 99999-9999");
+    var user = UserFake.start().withPhone(currentPhone).build();
+
+    user.changePhoneTo(equivalentPhone);
+
+    assertSame(currentPhone, user.phone());
   }
 
   @Test
