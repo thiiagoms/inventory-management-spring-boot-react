@@ -2,10 +2,10 @@ package io.thiiagoms.ims.shared.presentation.http.exception;
 
 import io.thiiagoms.ims.shared.application.exception.NotFoundException;
 import io.thiiagoms.ims.shared.application.exception.ResourceAlreadyExistsException;
+import io.thiiagoms.ims.shared.application.exception.ResourceNotChangedException;
 import io.thiiagoms.ims.shared.domain.exception.AuthorizationFailedException;
 import io.thiiagoms.ims.shared.domain.exception.ForbiddenAccessException;
 import io.thiiagoms.ims.shared.domain.exception.InvalidDomainArgumentException;
-import io.thiiagoms.ims.user.application.exception.UserNotChangedException;
 import java.time.Instant;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -131,8 +131,8 @@ public class GlobalExceptionHttpHandler {
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
   }
 
-  @ExceptionHandler(UserNotChangedException.class)
-  ResponseEntity<ErrorResponse> handleUserNotChanged(UserNotChangedException exception) {
+  @ExceptionHandler(ResourceNotChangedException.class)
+  ResponseEntity<ErrorResponse> handleResourceNotChanged(ResourceNotChangedException exception) {
     ErrorResponse response =
         new ErrorResponse(
             Instant.now(),
