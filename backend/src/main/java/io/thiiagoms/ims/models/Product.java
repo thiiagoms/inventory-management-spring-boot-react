@@ -1,5 +1,6 @@
 package io.thiiagoms.ims.models;
 
+import io.thiiagoms.ims.category.infrastructure.persistence.model.CategoryJpa;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -55,7 +56,7 @@ public class Product {
 
   @ManyToOne
   @JoinColumn(name = "category_id")
-  private Category category;
+  private CategoryJpa category;
 
   @NotBlank(message = "Expiry Date is required.")
   @Column(name = "expiry_date", nullable = false)
