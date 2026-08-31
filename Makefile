@@ -1,10 +1,12 @@
 BACKEND_DIR := backend
 MVNW := ./mvnw
+MYSQL_DATA_DIR := .devops/backend/mysql/data
 
-.PHONY: help test format format-check checkstyle spotbugs architecture quality verify
+.PHONY: help clean test format format-check checkstyle spotbugs architecture quality verify
 
 help:
 	@echo "Available quality commands:"
+	@echo "  make clean      		Remove local MySQL database files while keeping .gitignore"
 	@echo "  make test          Run backend tests and generate the JaCoCo coverage report"
 	@echo "  make format        Apply automatic Java formatting"
 	@echo "  make format-check  Verify Java formatting"
@@ -13,6 +15,9 @@ help:
 	@echo "  make architecture  Run Clean Architecture and DDD dependency tests"
 	@echo "  make quality       Run every quality gate without the full test suite"
 	@echo "  make verify        Run tests and every Maven quality gate"
+
+clean:
+	find $(MYSQL_DATA_DIR) -mindepth 1 ! -path '$(MYSQL_DATA_DIR)/.gitignore' -delete
 
 test:
 	cd $(BACKEND_DIR) && $(MVNW) clean test
