@@ -4,7 +4,7 @@ import io.thiiagoms.ims.shared.application.exception.NotFoundException;
 
 public class UserNotFoundException extends NotFoundException {
 
-  protected UserNotFoundException(String message, String field) {
+  private UserNotFoundException(String message, String field) {
     super(message, field);
   }
 
