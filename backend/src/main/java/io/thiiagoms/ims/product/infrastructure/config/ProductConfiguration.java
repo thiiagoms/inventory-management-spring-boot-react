@@ -3,6 +3,8 @@ package io.thiiagoms.ims.product.infrastructure.config;
 import io.thiiagoms.ims.product.application.service.ProductFinder;
 import io.thiiagoms.ims.product.application.service.ProductUniqueness;
 import io.thiiagoms.ims.product.application.usecase.register.RegisterProduct;
+import io.thiiagoms.ims.product.application.usecase.retrieve.RetrieveProduct;
+import io.thiiagoms.ims.product.application.usecase.retrieve.RetrieveProducts;
 import io.thiiagoms.ims.product.application.usecase.update.UpdateProduct;
 import io.thiiagoms.ims.product.domain.repository.ProductRepository;
 import io.thiiagoms.ims.shared.domain.identity.IdentityGenerator;
@@ -26,6 +28,16 @@ public class ProductConfiguration {
   RegisterProduct registerProduct(
       ProductRepository repository, IdentityGenerator generator, ProductUniqueness uniqueness) {
     return new RegisterProduct(repository, generator, uniqueness);
+  }
+
+  @Bean
+  RetrieveProduct retrieveProduct(ProductFinder finder) {
+    return new RetrieveProduct(finder);
+  }
+
+  @Bean
+  RetrieveProducts retrieveProducts(ProductRepository repository) {
+    return new RetrieveProducts(repository);
   }
 
   @Bean
