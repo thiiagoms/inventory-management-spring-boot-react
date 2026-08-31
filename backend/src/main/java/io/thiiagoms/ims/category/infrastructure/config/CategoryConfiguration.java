@@ -3,9 +3,9 @@ package io.thiiagoms.ims.category.infrastructure.config;
 import io.thiiagoms.ims.category.application.service.CategoryFinder;
 import io.thiiagoms.ims.category.application.service.CategoryUniqueness;
 import io.thiiagoms.ims.category.application.usecase.destroy.DestroyCategory;
-import io.thiiagoms.ims.category.application.usecase.find.FindCategory;
-import io.thiiagoms.ims.category.application.usecase.list.ListCategories;
 import io.thiiagoms.ims.category.application.usecase.register.RegisterCategory;
+import io.thiiagoms.ims.category.application.usecase.retrieve.RetrieveCategories;
+import io.thiiagoms.ims.category.application.usecase.retrieve.RetrieveCategory;
 import io.thiiagoms.ims.category.application.usecase.update.UpdateCategory;
 import io.thiiagoms.ims.category.domain.repository.CategoryRepository;
 import io.thiiagoms.ims.shared.domain.identity.IdentityGenerator;
@@ -31,13 +31,13 @@ public class CategoryConfiguration {
   }
 
   @Bean
-  FindCategory findCategory(CategoryFinder finder) {
-    return new FindCategory(finder);
+  RetrieveCategory retrieveCategory(CategoryFinder finder) {
+    return new RetrieveCategory(finder);
   }
 
   @Bean
-  ListCategories listCategories(CategoryRepository repository) {
-    return new ListCategories(repository);
+  RetrieveCategories retrieveCategories(CategoryRepository repository) {
+    return new RetrieveCategories(repository);
   }
 
   @Bean

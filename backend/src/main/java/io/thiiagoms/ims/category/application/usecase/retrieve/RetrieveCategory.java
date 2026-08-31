@@ -1,13 +1,13 @@
-package io.thiiagoms.ims.category.application.usecase.find;
+package io.thiiagoms.ims.category.application.usecase.retrieve;
 
 import io.thiiagoms.ims.category.application.dto.CategoryOutput;
 import io.thiiagoms.ims.category.application.service.CategoryFinder;
 import io.thiiagoms.ims.shared.domain.valueobject.Id;
 
-public class FindCategory {
+public class RetrieveCategory {
   private final CategoryFinder finder;
 
-  public FindCategory(CategoryFinder finder) {
+  public RetrieveCategory(CategoryFinder finder) {
     this.finder = finder;
   }
 

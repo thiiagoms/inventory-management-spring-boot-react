@@ -1,4 +1,4 @@
-package io.thiiagoms.ims.category.application.usecase.find;
+package io.thiiagoms.ims.category.application.usecase.retrieve;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -12,20 +12,20 @@ import io.thiiagoms.ims.shared.domain.valueobject.Id;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class FindCategoryTest {
+class RetrieveCategoryTest {
   private Id id;
   private CategoryRepository repository;
-  private FindCategory useCase;
+  private RetrieveCategory useCase;
 
   @BeforeEach
   void setUp() {
     id = new Id("3780baf2-deed-448d-a763-ce7b06efd394");
     repository = new CategoryMemoryRepository();
-    useCase = new FindCategory(new CategoryFinder(repository));
+    useCase = new RetrieveCategory(new CategoryFinder(repository));
   }
 
   @Test
-  void itReturnsCategoryDataWhenTheCategoryExists() {
+  void itRetrievesACategoryById() {
     var expectedCategory = CategoryFake.start().withId(id).build();
     repository.save(expectedCategory);
 

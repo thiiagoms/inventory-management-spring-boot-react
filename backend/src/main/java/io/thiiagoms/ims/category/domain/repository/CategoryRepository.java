@@ -2,8 +2,9 @@ package io.thiiagoms.ims.category.domain.repository;
 
 import io.thiiagoms.ims.category.domain.Category;
 import io.thiiagoms.ims.category.domain.valueobject.Title;
+import io.thiiagoms.ims.shared.domain.pagination.Page;
+import io.thiiagoms.ims.shared.domain.pagination.Pagination;
 import io.thiiagoms.ims.shared.domain.valueobject.Id;
-import java.util.List;
 import java.util.Optional;
 
 public interface CategoryRepository {
@@ -12,7 +13,7 @@ public interface CategoryRepository {
 
   Optional<Category> findByTitle(Title title);
 
-  List<Category> findAll();
+  Page<Category> findAll(Pagination pagination);
 
   void save(Category category);
 

@@ -8,29 +8,22 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
 
-class FindCategoryApiTest extends CategoryApiTestSupport {
+class RetrieveCategoryApiTest extends CategoryApiTestSupport {
   @Autowired
-  FindCategoryApiTest(MockMvc mockMvc) {
+  RetrieveCategoryApiTest(MockMvc mockMvc) {
     super(mockMvc);
   }
 
   @Test
-  void itFindsACategoryById() throws Exception {
+  void itRetrievesACategoryById() throws Exception {
     String token = authenticate();
     String id = createCategory(token, "Office", "Office products");
 
     getJson(ENDPOINT + "/" + id, token)
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.id").value(id))
-        .andExpect(jsonPath("$.title").value("Office"));
-  }
-
-  @Test
-  void itListsCategories() throws Exception {
-    String token = authenticate();
-    String id = createCategory(token, "Office", "Office products");
-
-    getJson(ENDPOINT, token).andExpect(status().isOk()).andExpect(jsonPath("$[0].id").value(id));
+        .andExpect(jsonPath("$.title").value("Office"))
+        .andExpect(jsonPath("$.description").value("Office products"));
   }
 
   @Test
@@ -39,6 +32,13 @@ class FindCategoryApiTest extends CategoryApiTestSupport {
 
     getJson(ENDPOINT + "/3780baf2-deed-448d-a763-ce7b06efd394", token)
         .andExpect(status().isNotFound())
+        .andExpect(jsonPath("$.error").value("resource_not_found"))
         .andExpect(jsonPath("$.field").value("id"));
+  }
+
+  @Test
+  void itRequiresAuthentication() throws Exception {
+    getJson(ENDPOINT + "/3780baf2-deed-448d-a763-ce7b06efd394")
+        .andExpect(status().isUnauthorized());
   }
 }
