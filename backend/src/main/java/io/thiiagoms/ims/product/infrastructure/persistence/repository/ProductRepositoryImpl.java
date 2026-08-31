@@ -6,6 +6,7 @@ import io.thiiagoms.ims.product.domain.repository.ProductRepository;
 import io.thiiagoms.ims.product.domain.valueobject.Sku;
 import io.thiiagoms.ims.product.domain.valueobject.Title;
 import io.thiiagoms.ims.product.infrastructure.persistence.mapper.ProductMapper;
+import io.thiiagoms.ims.shared.domain.valueobject.Id;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.stereotype.Repository;
@@ -19,6 +20,10 @@ public class ProductRepositoryImpl implements ProductRepository {
       ProductJpaRepository repository, CategoryJpaRepository categoryRepository) {
     this.repository = repository;
     this.categoryRepository = categoryRepository;
+  }
+
+  public Optional<Product> findById(Id id) {
+    return repository.findById(UUID.fromString(id.value())).map(ProductMapper::toDomain);
   }
 
   public Optional<Product> findByTitle(Title title) {

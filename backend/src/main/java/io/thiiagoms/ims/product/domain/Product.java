@@ -14,17 +14,17 @@ public final class Product {
 
   private final Id id;
 
-  private final Title title;
+  private Title title;
 
-  private final Description description;
+  private Description description;
 
   private final Sku sku;
 
-  private final ImageUrl imageUrl;
+  private ImageUrl imageUrl;
 
-  private final Price price;
+  private Price price;
 
-  private final StockQuantity stockQuantity;
+  private StockQuantity stockQuantity;
 
   private final Id categoryId;
 
@@ -123,5 +123,45 @@ public final class Product {
 
   public ExpiryDate expiryDate() {
     return expiryDate;
+  }
+
+  public void changeTitleTo(Title title) {
+    Guard.againstNull(Title.FIELD, title);
+    if (this.title.equals(title)) {
+      return;
+    }
+    this.title = title;
+  }
+
+  public void changeDescriptionTo(Description description) {
+    Guard.againstNull(Description.FIELD, description);
+    if (this.description.equals(description)) {
+      return;
+    }
+    this.description = description;
+  }
+
+  public void changeImageUrlTo(ImageUrl imageUrl) {
+    Guard.againstNull(ImageUrl.FIELD, imageUrl);
+    if (this.imageUrl.equals(imageUrl)) {
+      return;
+    }
+    this.imageUrl = imageUrl;
+  }
+
+  public void changePriceTo(Price price) {
+    Guard.againstNull(Price.FIELD, price);
+    if (this.price.equals(price)) {
+      return;
+    }
+    this.price = price;
+  }
+
+  public void changeStockQuantityTo(StockQuantity stockQuantity) {
+    Guard.againstNull(StockQuantity.FIELD, stockQuantity);
+    if (this.stockQuantity.equals(stockQuantity)) {
+      return;
+    }
+    this.stockQuantity = stockQuantity;
   }
 }
