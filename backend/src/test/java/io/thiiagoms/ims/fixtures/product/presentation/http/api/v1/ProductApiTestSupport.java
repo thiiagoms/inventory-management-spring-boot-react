@@ -12,11 +12,10 @@ public abstract class ProductApiTestSupport extends CategoryApiTestSupport {
     super(mockMvc);
   }
 
-  protected ProductRequest productRequest(String title, String sku, String categoryId) {
+  protected ProductRequest productRequest(String title, String categoryId) {
     return new ProductRequest(
         title,
         "Ergonomic office chair",
-        sku,
         "https://example.com/chair.png",
         new BigDecimal("499.90"),
         10,
@@ -27,7 +26,6 @@ public abstract class ProductApiTestSupport extends CategoryApiTestSupport {
   public record ProductRequest(
       String title,
       String description,
-      String sku,
       String imageUrl,
       BigDecimal price,
       Integer stockQuantity,

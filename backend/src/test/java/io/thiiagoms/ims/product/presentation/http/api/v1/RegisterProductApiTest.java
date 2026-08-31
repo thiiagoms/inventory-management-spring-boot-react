@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
 
 class RegisterProductApiTest extends ProductApiTestSupport {
+
   private final ProductJpaRepository repository;
 
   @Autowired
@@ -26,9 +27,10 @@ class RegisterProductApiTest extends ProductApiTestSupport {
     String categoryId = createCategory(token, "Office", "Office products");
 
     String response =
-        postJson(PRODUCT_ENDPOINT, productRequest("office chair", "CHAIR-001", categoryId), token)
+        postJson(PRODUCT_ENDPOINT, productRequest("office chair", categoryId), token)
             .andExpect(status().isCreated())
             .andExpect(jsonPath("$.title").value("Office Chair"))
+            .andExpect(jsonPath("$.sku").value(org.hamcrest.Matchers.startsWith("office-chair-")))
             .andExpect(jsonPath("$.categoryId").value(categoryId))
             .andReturn()
             .getResponse()
@@ -41,7 +43,7 @@ class RegisterProductApiTest extends ProductApiTestSupport {
   void itRequiresAuthentication() throws Exception {
     postJson(
             PRODUCT_ENDPOINT,
-            productRequest("Office Chair", "CHAIR-001", "430e7bc1-59b9-472e-ae21-3cd90cde7caa"))
+            productRequest("Office Chair", "430e7bc1-59b9-472e-ae21-3cd90cde7caa"))
         .andExpect(status().isUnauthorized());
   }
 
@@ -49,23 +51,10 @@ class RegisterProductApiTest extends ProductApiTestSupport {
   void itRejectsANormalizedDuplicateTitle() throws Exception {
     String token = authenticate();
     String categoryId = createCategory(token, "Office", "Office products");
-    postJsonAndReturnId(
-        PRODUCT_ENDPOINT, productRequest("Office Chair", "CHAIR-001", categoryId), token);
+    postJsonAndReturnId(PRODUCT_ENDPOINT, productRequest("Office Chair", categoryId), token);
 
-    postJson(PRODUCT_ENDPOINT, productRequest("  office chair ", "CHAIR-002", categoryId), token)
+    postJson(PRODUCT_ENDPOINT, productRequest("  office chair ", categoryId), token)
         .andExpect(status().isConflict())
         .andExpect(jsonPath("$.field").value("title"));
-  }
-
-  @Test
-  void itRejectsANormalizedDuplicateSku() throws Exception {
-    String token = authenticate();
-    String categoryId = createCategory(token, "Office", "Office products");
-    postJsonAndReturnId(
-        PRODUCT_ENDPOINT, productRequest("Office Chair", "CHAIR-001", categoryId), token);
-
-    postJson(PRODUCT_ENDPOINT, productRequest("Meeting Chair", " chair-001 ", categoryId), token)
-        .andExpect(status().isConflict())
-        .andExpect(jsonPath("$.field").value("sku"));
   }
 }

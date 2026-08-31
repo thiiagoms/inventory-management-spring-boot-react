@@ -4,7 +4,6 @@ import io.thiiagoms.ims.product.domain.valueobject.Description;
 import io.thiiagoms.ims.product.domain.valueobject.ExpiryDate;
 import io.thiiagoms.ims.product.domain.valueobject.ImageUrl;
 import io.thiiagoms.ims.product.domain.valueobject.Price;
-import io.thiiagoms.ims.product.domain.valueobject.Sku;
 import io.thiiagoms.ims.product.domain.valueobject.StockQuantity;
 import io.thiiagoms.ims.product.domain.valueobject.Title;
 import io.thiiagoms.ims.shared.domain.valueobject.Id;
@@ -12,7 +11,6 @@ import io.thiiagoms.ims.shared.domain.valueobject.Id;
 public record RegisterProductData(
     Title title,
     Description description,
-    Sku sku,
     ImageUrl imageUrl,
     Price price,
     StockQuantity stockQuantity,

@@ -5,7 +5,6 @@ import io.thiiagoms.ims.product.domain.valueobject.Description;
 import io.thiiagoms.ims.product.domain.valueobject.ExpiryDate;
 import io.thiiagoms.ims.product.domain.valueobject.ImageUrl;
 import io.thiiagoms.ims.product.domain.valueobject.Price;
-import io.thiiagoms.ims.product.domain.valueobject.Sku;
 import io.thiiagoms.ims.product.domain.valueobject.StockQuantity;
 import io.thiiagoms.ims.product.domain.valueobject.Title;
 import io.thiiagoms.ims.shared.domain.valueobject.Id;
@@ -18,7 +17,6 @@ import java.time.LocalDateTime;
 public record RegisterProductRequest(
     @NotBlank String title,
     @NotBlank String description,
-    @NotBlank String sku,
     @NotBlank String imageUrl,
     @NotNull @Positive BigDecimal price,
     @NotNull @Positive Integer stockQuantity,
@@ -29,7 +27,6 @@ public record RegisterProductRequest(
     return new RegisterProductData(
         new Title(title),
         new Description(description),
-        new Sku(sku),
         new ImageUrl(imageUrl),
         new Price(price),
         new StockQuantity(stockQuantity),
