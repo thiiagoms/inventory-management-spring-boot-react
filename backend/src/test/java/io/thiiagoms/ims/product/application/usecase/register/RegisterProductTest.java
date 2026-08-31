@@ -23,13 +23,16 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class RegisterProductTest {
+public class RegisterProductTest {
+
   private static final Id CATEGORY_ID = new Id("430e7bc1-59b9-472e-ae21-3cd90cde7caa");
 
   private IdentityGeneratorStub identityGenerator;
 
   private ProductRepository repository;
+
   private RegisterProduct useCase;
+
   private RegisterProductData data;
 
   @BeforeEach
