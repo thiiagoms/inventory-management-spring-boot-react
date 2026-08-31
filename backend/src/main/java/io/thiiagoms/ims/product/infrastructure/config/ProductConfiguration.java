@@ -2,6 +2,7 @@ package io.thiiagoms.ims.product.infrastructure.config;
 
 import io.thiiagoms.ims.product.application.service.ProductFinder;
 import io.thiiagoms.ims.product.application.service.ProductUniqueness;
+import io.thiiagoms.ims.product.application.usecase.destroy.DestroyProduct;
 import io.thiiagoms.ims.product.application.usecase.register.RegisterProduct;
 import io.thiiagoms.ims.product.application.usecase.retrieve.RetrieveProduct;
 import io.thiiagoms.ims.product.application.usecase.retrieve.RetrieveProducts;
@@ -44,5 +45,10 @@ public class ProductConfiguration {
   UpdateProduct updateProduct(
       ProductFinder finder, ProductRepository repository, ProductUniqueness uniqueness) {
     return new UpdateProduct(finder, repository, uniqueness);
+  }
+
+  @Bean
+  DestroyProduct destroyProduct(ProductFinder finder, ProductRepository repository) {
+    return new DestroyProduct(finder, repository);
   }
 }

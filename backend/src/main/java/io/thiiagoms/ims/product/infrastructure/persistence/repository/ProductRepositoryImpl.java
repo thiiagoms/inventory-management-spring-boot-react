@@ -58,4 +58,8 @@ public class ProductRepositoryImpl implements ProductRepository {
         categoryRepository.getReferenceById(UUID.fromString(product.categoryId().value()));
     repository.save(ProductMapper.toPersistence(product, category));
   }
+
+  public void destroy(Id id) {
+    repository.deleteById(UUID.fromString(id.value()));
+  }
 }

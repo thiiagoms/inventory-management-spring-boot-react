@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Optional;
 
 public class ProductMemoryRepository implements ProductRepository {
+
   private final Map<String, Product> products = new LinkedHashMap<>();
 
   public Optional<Product> findById(Id id) {
@@ -52,5 +53,9 @@ public class ProductMemoryRepository implements ProductRepository {
 
   public void save(Product product) {
     products.put(product.id().value(), product);
+  }
+
+  public void destroy(Id id) {
+    products.remove(id.value());
   }
 }

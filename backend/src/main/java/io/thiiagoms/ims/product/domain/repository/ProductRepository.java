@@ -19,4 +19,6 @@ public interface ProductRepository {
   Page<Product> findAll(Pagination pagination);
 
   void save(Product product);
+
+  void destroy(Id id);
 }
