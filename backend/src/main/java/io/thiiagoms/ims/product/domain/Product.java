@@ -1,5 +1,6 @@
 package io.thiiagoms.ims.product.domain;
 
+import io.thiiagoms.ims.product.domain.valueobject.CategoryIds;
 import io.thiiagoms.ims.product.domain.valueobject.Description;
 import io.thiiagoms.ims.product.domain.valueobject.ExpiryDate;
 import io.thiiagoms.ims.product.domain.valueobject.ImageUrl;
@@ -26,7 +27,7 @@ public final class Product {
 
   private StockQuantity stockQuantity;
 
-  private final Id categoryId;
+  private final CategoryIds categoryIds;
 
   private final ExpiryDate expiryDate;
 
@@ -38,7 +39,7 @@ public final class Product {
       ImageUrl imageUrl,
       Price price,
       StockQuantity stockQuantity,
-      Id categoryId,
+      CategoryIds categoryIds,
       ExpiryDate expiryDate) {
     Guard.againstNull(Id.FIELD, id);
     Guard.againstNull(Title.FIELD, title);
@@ -47,7 +48,7 @@ public final class Product {
     Guard.againstNull(ImageUrl.FIELD, imageUrl);
     Guard.againstNull(Price.FIELD, price);
     Guard.againstNull(StockQuantity.FIELD, stockQuantity);
-    Guard.againstNull("categoryId", categoryId);
+    Guard.againstNull(CategoryIds.FIELD, categoryIds);
     Guard.againstNull(ExpiryDate.FIELD, expiryDate);
 
     this.id = id;
@@ -57,7 +58,7 @@ public final class Product {
     this.imageUrl = imageUrl;
     this.price = price;
     this.stockQuantity = stockQuantity;
-    this.categoryId = categoryId;
+    this.categoryIds = categoryIds;
     this.expiryDate = expiryDate;
   }
 
@@ -69,10 +70,10 @@ public final class Product {
       ImageUrl imageUrl,
       Price price,
       StockQuantity stockQuantity,
-      Id categoryId,
+      CategoryIds categoryIds,
       ExpiryDate expiryDate) {
     return new Product(
-        id, title, description, sku, imageUrl, price, stockQuantity, categoryId, expiryDate);
+        id, title, description, sku, imageUrl, price, stockQuantity, categoryIds, expiryDate);
   }
 
   public static Product rehydrate(
@@ -83,10 +84,10 @@ public final class Product {
       ImageUrl imageUrl,
       Price price,
       StockQuantity stockQuantity,
-      Id categoryId,
+      CategoryIds categoryIds,
       ExpiryDate expiryDate) {
     return new Product(
-        id, title, description, sku, imageUrl, price, stockQuantity, categoryId, expiryDate);
+        id, title, description, sku, imageUrl, price, stockQuantity, categoryIds, expiryDate);
   }
 
   public Id id() {
@@ -117,8 +118,8 @@ public final class Product {
     return stockQuantity;
   }
 
-  public Id categoryId() {
-    return categoryId;
+  public CategoryIds categoryIds() {
+    return categoryIds;
   }
 
   public ExpiryDate expiryDate() {

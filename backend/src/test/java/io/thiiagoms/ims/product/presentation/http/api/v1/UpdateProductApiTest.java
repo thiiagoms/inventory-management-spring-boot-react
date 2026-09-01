@@ -188,10 +188,10 @@ class UpdateProductApiTest extends ProductApiTestSupport {
   @Test
   void itRejectsATitleOwnedByAnotherProduct() throws Exception {
     String token = authenticate();
-    String categoryId = createCategory(token, "Office", "Office products");
-    postJsonAndReturnId(PRODUCT_ENDPOINT, productRequest("Office Chair", categoryId), token);
+    var categoryIds = createProductCategories(token);
+    postJsonAndReturnId(PRODUCT_ENDPOINT, productRequest("Office Chair", categoryIds), token);
     String productId =
-        postJsonAndReturnId(PRODUCT_ENDPOINT, productRequest("Meeting Chair", categoryId), token);
+        postJsonAndReturnId(PRODUCT_ENDPOINT, productRequest("Meeting Chair", categoryIds), token);
 
     patchJson(
             PRODUCT_ENDPOINT + "/" + productId,
@@ -215,8 +215,9 @@ class UpdateProductApiTest extends ProductApiTestSupport {
   }
 
   private String createProduct(String token) throws Exception {
-    String categoryId = createCategory(token, "Office", "Office products");
-    return postJsonAndReturnId(PRODUCT_ENDPOINT, productRequest("Office Chair", categoryId), token);
+    var categoryIds = createProductCategories(token);
+    return postJsonAndReturnId(
+        PRODUCT_ENDPOINT, productRequest("Office Chair", categoryIds), token);
   }
 
   private void assertValidationError(

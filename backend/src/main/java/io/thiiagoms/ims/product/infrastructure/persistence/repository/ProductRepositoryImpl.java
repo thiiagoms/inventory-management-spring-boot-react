@@ -10,6 +10,7 @@ import io.thiiagoms.ims.shared.domain.pagination.Page;
 import io.thiiagoms.ims.shared.domain.pagination.Pagination;
 import io.thiiagoms.ims.shared.domain.valueobject.Id;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -54,9 +55,13 @@ public class ProductRepositoryImpl implements ProductRepository {
   }
 
   public void save(Product product) {
-    var category =
-        categoryRepository.getReferenceById(UUID.fromString(product.categoryId().value()));
-    repository.save(ProductMapper.toPersistence(product, category));
+    var categories =
+        product.categoryIds().values().stream()
+            .map(
+                categoryId ->
+                    categoryRepository.getReferenceById(UUID.fromString(categoryId.value())))
+            .collect(java.util.stream.Collectors.toSet());
+    repository.save(ProductMapper.toPersistence(product, Set.copyOf(categories)));
   }
 
   public void destroy(Id id) {

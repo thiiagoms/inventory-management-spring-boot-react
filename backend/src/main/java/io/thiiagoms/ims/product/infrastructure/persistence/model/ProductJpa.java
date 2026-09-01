@@ -6,10 +6,12 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Set;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -40,9 +42,12 @@ public class ProductJpa extends BaseJpaEntity {
   @Column(name = "stock_quantity", nullable = false)
   private Integer stockQuantity;
 
-  @ManyToOne(fetch = FetchType.LAZY, optional = false)
-  @JoinColumn(name = "category_id", nullable = false)
-  private CategoryJpa category;
+  @ManyToMany(fetch = FetchType.EAGER)
+  @JoinTable(
+      name = "product_categories",
+      joinColumns = @JoinColumn(name = "product_id"),
+      inverseJoinColumns = @JoinColumn(name = "category_id"))
+  private Set<CategoryJpa> categories;
 
   @Column(name = "expiry_date", nullable = false)
   private LocalDateTime expiryDate;

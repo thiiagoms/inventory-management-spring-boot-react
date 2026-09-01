@@ -1,6 +1,7 @@
 package io.thiiagoms.ims.fixtures.product.domain;
 
 import io.thiiagoms.ims.product.domain.Product;
+import io.thiiagoms.ims.product.domain.valueobject.CategoryIds;
 import io.thiiagoms.ims.product.domain.valueobject.Description;
 import io.thiiagoms.ims.product.domain.valueobject.ExpiryDate;
 import io.thiiagoms.ims.product.domain.valueobject.ImageUrl;
@@ -11,6 +12,7 @@ import io.thiiagoms.ims.product.domain.valueobject.Title;
 import io.thiiagoms.ims.shared.domain.valueobject.Id;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class ProductFake {
   private Id id;
@@ -20,7 +22,7 @@ public class ProductFake {
   private ImageUrl imageUrl;
   private Price price;
   private StockQuantity stockQuantity;
-  private Id categoryId;
+  private CategoryIds categoryIds;
   private ExpiryDate expiryDate;
 
   private ProductFake() {
@@ -31,7 +33,12 @@ public class ProductFake {
     imageUrl = new ImageUrl("https://example.com/chair.png");
     price = new Price(new BigDecimal("499.90"));
     stockQuantity = new StockQuantity(10);
-    categoryId = new Id("430e7bc1-59b9-472e-ae21-3cd90cde7caa");
+    categoryIds =
+        new CategoryIds(
+            List.of(
+                new Id("430e7bc1-59b9-472e-ae21-3cd90cde7caa"),
+                new Id("3780baf2-deed-448d-a763-ce7b06efd394"),
+                new Id("baa86496-638f-4beb-bc03-de2f7589ad63")));
     expiryDate = new ExpiryDate(LocalDateTime.of(2100, 1, 1, 0, 0));
   }
 
@@ -54,8 +61,13 @@ public class ProductFake {
     return this;
   }
 
+  public ProductFake withCategoryIds(CategoryIds categoryIds) {
+    this.categoryIds = categoryIds;
+    return this;
+  }
+
   public Product build() {
     return Product.rehydrate(
-        id, title, description, sku, imageUrl, price, stockQuantity, categoryId, expiryDate);
+        id, title, description, sku, imageUrl, price, stockQuantity, categoryIds, expiryDate);
   }
 }

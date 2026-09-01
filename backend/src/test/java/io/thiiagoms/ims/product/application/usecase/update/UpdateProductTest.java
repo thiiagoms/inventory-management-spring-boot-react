@@ -52,7 +52,7 @@ public class UpdateProductTest {
     var imageUrl = new ImageUrl("https://example.com/meeting-chair.png");
     var price = new Price(new BigDecimal("699.90"));
     var stockQuantity = new StockQuantity(20);
-    var categoryId = product.categoryId();
+    var categoryIds = product.categoryIds();
     var expiryDate = product.expiryDate();
     var data =
         new UpdateProductData(
@@ -71,7 +71,7 @@ public class UpdateProductTest {
     assertEquals(imageUrl.value(), output.imageUrl());
     assertEquals(price.value(), output.price());
     assertEquals(stockQuantity.value(), output.stockQuantity());
-    assertEquals(categoryId.value(), output.categoryId());
+    assertEquals(categoryIds.values().stream().map(Id::value).toList(), output.categoryIds());
     assertEquals(expiryDate.value(), output.expiryDate());
   }
 

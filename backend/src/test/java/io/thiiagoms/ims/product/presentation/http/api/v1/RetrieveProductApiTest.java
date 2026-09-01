@@ -18,9 +18,9 @@ class RetrieveProductApiTest extends ProductApiTestSupport {
   @Test
   void itRetrievesAProductById() throws Exception {
     String token = authenticate();
-    String categoryId = createCategory(token, "Office", "Office products");
+    var categoryIds = createProductCategories(token);
     String productId =
-        postJsonAndReturnId(PRODUCT_ENDPOINT, productRequest("Office Chair", categoryId), token);
+        postJsonAndReturnId(PRODUCT_ENDPOINT, productRequest("Office Chair", categoryIds), token);
 
     getJson(PRODUCT_ENDPOINT + "/" + productId, token)
         .andExpect(status().isOk())
@@ -31,7 +31,7 @@ class RetrieveProductApiTest extends ProductApiTestSupport {
         .andExpect(jsonPath("$.imageUrl").value("https://example.com/chair.png"))
         .andExpect(jsonPath("$.price").value(499.90))
         .andExpect(jsonPath("$.stockQuantity").value(10))
-        .andExpect(jsonPath("$.categoryId").value(categoryId));
+        .andExpect(jsonPath("$.categoryIds.length()").value(3));
   }
 
   @Test

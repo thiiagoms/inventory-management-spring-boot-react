@@ -3,6 +3,7 @@ package io.thiiagoms.ims.product.application.dto;
 import io.thiiagoms.ims.product.domain.Product;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public record ProductOutput(
     String id,
@@ -12,8 +13,12 @@ public record ProductOutput(
     String imageUrl,
     BigDecimal price,
     Integer stockQuantity,
-    String categoryId,
+    List<String> categoryIds,
     LocalDateTime expiryDate) {
+  public ProductOutput {
+    categoryIds = List.copyOf(categoryIds);
+  }
+
   public static ProductOutput from(Product product) {
     return new ProductOutput(
         product.id().value(),
@@ -23,7 +28,7 @@ public record ProductOutput(
         product.imageUrl().value(),
         product.price().value(),
         product.stockQuantity().value(),
-        product.categoryId().value(),
+        product.categoryIds().values().stream().map(categoryId -> categoryId.value()).toList(),
         product.expiryDate().value());
   }
 }

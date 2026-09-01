@@ -33,7 +33,8 @@ public class RetrieveProductTest {
     assertEquals(product.id().value(), output.id());
     assertEquals(product.title().value(), output.title());
     assertEquals(product.sku().value(), output.sku());
-    assertEquals(product.categoryId().value(), output.categoryId());
+    assertEquals(
+        product.categoryIds().values().stream().map(Id::value).toList(), output.categoryIds());
   }
 
   @Test

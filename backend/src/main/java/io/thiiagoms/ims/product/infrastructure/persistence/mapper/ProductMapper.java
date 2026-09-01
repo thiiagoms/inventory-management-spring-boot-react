@@ -2,6 +2,7 @@ package io.thiiagoms.ims.product.infrastructure.persistence.mapper;
 
 import io.thiiagoms.ims.category.infrastructure.persistence.model.CategoryJpa;
 import io.thiiagoms.ims.product.domain.Product;
+import io.thiiagoms.ims.product.domain.valueobject.CategoryIds;
 import io.thiiagoms.ims.product.domain.valueobject.Description;
 import io.thiiagoms.ims.product.domain.valueobject.ExpiryDate;
 import io.thiiagoms.ims.product.domain.valueobject.ImageUrl;
@@ -11,12 +12,13 @@ import io.thiiagoms.ims.product.domain.valueobject.StockQuantity;
 import io.thiiagoms.ims.product.domain.valueobject.Title;
 import io.thiiagoms.ims.product.infrastructure.persistence.model.ProductJpa;
 import io.thiiagoms.ims.shared.domain.valueobject.Id;
+import java.util.Set;
 import java.util.UUID;
 
 public final class ProductMapper {
   private ProductMapper() {}
 
-  public static ProductJpa toPersistence(Product product, CategoryJpa category) {
+  public static ProductJpa toPersistence(Product product, Set<CategoryJpa> categories) {
     return ProductJpa.builder()
         .id(UUID.fromString(product.id().value()))
         .title(product.title().value())
@@ -25,7 +27,7 @@ public final class ProductMapper {
         .imageUrl(product.imageUrl().value())
         .price(product.price().value())
         .stockQuantity(product.stockQuantity().value())
-        .category(category)
+        .categories(Set.copyOf(categories))
         .expiryDate(product.expiryDate().value())
         .build();
   }
@@ -39,7 +41,11 @@ public final class ProductMapper {
         new ImageUrl(product.getImageUrl()),
         new Price(product.getPrice()),
         new StockQuantity(product.getStockQuantity()),
-        new Id(product.getCategory().getId().toString()),
+        CategoryIds.rehydrate(
+            product.getCategories().stream()
+                .map(category -> new Id(category.getId().toString()))
+                .sorted(java.util.Comparator.comparing(Id::value))
+                .toList()),
         ExpiryDate.rehydrate(product.getExpiryDate()));
   }
 }
