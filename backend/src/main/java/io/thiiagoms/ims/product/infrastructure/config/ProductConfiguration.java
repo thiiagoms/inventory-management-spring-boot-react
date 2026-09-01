@@ -1,5 +1,6 @@
 package io.thiiagoms.ims.product.infrastructure.config;
 
+import io.thiiagoms.ims.category.application.service.CategoryFinder;
 import io.thiiagoms.ims.product.application.service.ProductFinder;
 import io.thiiagoms.ims.product.application.service.ProductUniqueness;
 import io.thiiagoms.ims.product.application.usecase.destroy.DestroyProduct;
@@ -7,7 +8,9 @@ import io.thiiagoms.ims.product.application.usecase.register.RegisterProduct;
 import io.thiiagoms.ims.product.application.usecase.retrieve.RetrieveProduct;
 import io.thiiagoms.ims.product.application.usecase.retrieve.RetrieveProducts;
 import io.thiiagoms.ims.product.application.usecase.update.UpdateProduct;
+import io.thiiagoms.ims.product.domain.SkuGenerator;
 import io.thiiagoms.ims.product.domain.repository.ProductRepository;
+import io.thiiagoms.ims.product.domain.valueobject.Sku;
 import io.thiiagoms.ims.shared.domain.identity.IdentityGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,8 +30,12 @@ public class ProductConfiguration {
 
   @Bean
   RegisterProduct registerProduct(
-      ProductRepository repository, IdentityGenerator generator, ProductUniqueness uniqueness) {
-    return new RegisterProduct(repository, generator, uniqueness);
+      CategoryFinder categoryFinder,
+      ProductRepository repository,
+      IdentityGenerator generator,
+      ProductUniqueness uniqueness) {
+    SkuGenerator skuGenerator = Sku::generate;
+    return new RegisterProduct(categoryFinder, repository, generator, skuGenerator, uniqueness);
   }
 
   @Bean

@@ -87,9 +87,9 @@ class RetrieveProductsApiTest extends ProductApiTestSupport {
   }
 
   private void createProducts(String token) throws Exception {
-    String categoryId = createCategory(token, "Office", "Office products");
-    postJsonAndReturnId(PRODUCT_ENDPOINT, productRequest("Warehouse Chair", categoryId), token);
-    postJsonAndReturnId(PRODUCT_ENDPOINT, productRequest("Office Chair", categoryId), token);
-    postJsonAndReturnId(PRODUCT_ENDPOINT, productRequest("Meeting Chair", categoryId), token);
+    var categoryIds = createProductCategories(token);
+    postJsonAndReturnId(PRODUCT_ENDPOINT, productRequest("Warehouse Chair", categoryIds), token);
+    postJsonAndReturnId(PRODUCT_ENDPOINT, productRequest("Office Chair", categoryIds), token);
+    postJsonAndReturnId(PRODUCT_ENDPOINT, productRequest("Meeting Chair", categoryIds), token);
   }
 }

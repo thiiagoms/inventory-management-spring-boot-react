@@ -3,6 +3,7 @@ package io.thiiagoms.ims.product.presentation.http.api.v1.shared;
 import io.thiiagoms.ims.product.application.dto.ProductOutput;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public record ProductResponse(
     String id,
@@ -12,8 +13,12 @@ public record ProductResponse(
     String imageUrl,
     BigDecimal price,
     Integer stockQuantity,
-    String categoryId,
+    List<String> categoryIds,
     LocalDateTime expiryDate) {
+  public ProductResponse {
+    categoryIds = List.copyOf(categoryIds);
+  }
+
   public static ProductResponse from(ProductOutput output) {
     return new ProductResponse(
         output.id(),
@@ -23,7 +28,7 @@ public record ProductResponse(
         output.imageUrl(),
         output.price(),
         output.stockQuantity(),
-        output.categoryId(),
+        output.categoryIds(),
         output.expiryDate());
   }
 }
