@@ -2,6 +2,7 @@ package io.thiiagoms.ims.models;
 
 import io.thiiagoms.ims.enums.transaction.Status;
 import io.thiiagoms.ims.enums.transaction.Type;
+import io.thiiagoms.ims.product.infrastructure.persistence.model.ProductJpa;
 import io.thiiagoms.ims.user.infrastructure.persistence.model.UserJpa;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -69,7 +70,7 @@ public class Transaction {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "product_id")
-  private Product product;
+  private ProductJpa product;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id")

@@ -4,10 +4,13 @@ import io.thiiagoms.ims.category.domain.Category;
 import io.thiiagoms.ims.category.domain.repository.CategoryRepository;
 import io.thiiagoms.ims.category.domain.valueobject.Title;
 import io.thiiagoms.ims.category.infrastructure.persistence.mapper.CategoryMapper;
+import io.thiiagoms.ims.shared.domain.pagination.Page;
+import io.thiiagoms.ims.shared.domain.pagination.Pagination;
 import io.thiiagoms.ims.shared.domain.valueobject.Id;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -26,8 +29,19 @@ public class CategoryRepositoryImpl implements CategoryRepository {
     return repository.findByTitle(title.value()).map(CategoryMapper::toDomain);
   }
 
-  public List<Category> findAll() {
-    return repository.findAll().stream().map(CategoryMapper::toDomain).toList();
+  public Page<Category> findAll(Pagination pagination) {
+    var pageable =
+        PageRequest.of(pagination.page(), pagination.size(), Sort.by("title").ascending());
+    var categories = repository.findAll(pageable);
+
+    return new Page<>(
+        categories.getContent().stream().map(CategoryMapper::toDomain).toList(),
+        categories.getNumber(),
+        categories.getSize(),
+        categories.getTotalElements(),
+        categories.getTotalPages(),
+        categories.isFirst(),
+        categories.isLast());
   }
 
   public void save(Category category) {

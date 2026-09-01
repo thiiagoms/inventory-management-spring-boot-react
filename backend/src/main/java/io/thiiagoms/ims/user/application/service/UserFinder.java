@@ -1,5 +1,6 @@
 package io.thiiagoms.ims.user.application.service;
 
+import io.thiiagoms.ims.shared.application.exception.NotFoundException;
 import io.thiiagoms.ims.shared.domain.valueobject.Id;
 import io.thiiagoms.ims.user.application.exception.UserNotFoundException;
 import io.thiiagoms.ims.user.domain.User;
@@ -28,7 +29,7 @@ public class UserFinder {
         () -> UserNotFoundException.with("User not found with the provided e-mail.", Email.FIELD));
   }
 
-  private <T> T findOrFail(Supplier<Optional<T>> resolver, Supplier<RuntimeException> exception) {
+  private <T> T findOrFail(Supplier<Optional<T>> resolver, Supplier<NotFoundException> exception) {
     return resolver.get().orElseThrow(exception);
   }
 }

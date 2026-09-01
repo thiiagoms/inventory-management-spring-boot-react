@@ -3,9 +3,11 @@ package io.thiiagoms.ims.fixtures.category.infrastructure.persistence.repository
 import io.thiiagoms.ims.category.domain.Category;
 import io.thiiagoms.ims.category.domain.repository.CategoryRepository;
 import io.thiiagoms.ims.category.domain.valueobject.Title;
+import io.thiiagoms.ims.shared.domain.pagination.Page;
+import io.thiiagoms.ims.shared.domain.pagination.Pagination;
 import io.thiiagoms.ims.shared.domain.valueobject.Id;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -22,8 +24,27 @@ public class CategoryMemoryRepository implements CategoryRepository {
         .findFirst();
   }
 
-  public List<Category> findAll() {
-    return List.copyOf(categories.values());
+  public Page<Category> findAll(Pagination pagination) {
+    var allCategories =
+        categories.values().stream()
+            .sorted(Comparator.comparing(category -> category.title().value()))
+            .toList();
+    long offset = (long) pagination.page() * pagination.size();
+    int fromIndex = (int) Math.min(offset, allCategories.size());
+    int toIndex = Math.min(fromIndex + pagination.size(), allCategories.size());
+    int totalPages =
+        allCategories.isEmpty()
+            ? 0
+            : (int) Math.ceil((double) allCategories.size() / pagination.size());
+
+    return new Page<>(
+        allCategories.subList(fromIndex, toIndex),
+        pagination.page(),
+        pagination.size(),
+        allCategories.size(),
+        totalPages,
+        pagination.page() == 0,
+        pagination.page() >= totalPages - 1);
   }
 
   public void save(Category category) {
