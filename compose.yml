@@ -56,6 +56,31 @@ services:
     networks:
       - inventory
 
+  frontend:
+    build:
+      context: .
+      dockerfile: ./.devops/frontend/node/Dockerfile
+    restart: unless-stopped
+    environment:
+      VITE_API_URL: ${VITE_API_DOCKER_URL:-http://backend:8080}
+    ports:
+      - "127.0.0.1:${FRONTEND_PORT:-5173}:5173"
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "wget --quiet --tries=1 --spider http://127.0.0.1:5173/ || exit 1",
+        ]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+    networks:
+      - inventory
+
 networks:
   inventory:
     driver: bridge

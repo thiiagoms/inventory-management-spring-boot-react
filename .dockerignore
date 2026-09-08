@@ -6,6 +6,10 @@ backend/target
 backend/.env
 backend/.idea
 backend/.vscode
+frontend/node_modules
+frontend/dist
+frontend/.env
+frontend/.env.*
 .devops/backend/mysql/data
 **/.DS_Store
 **/*.log
