@@ -1,5 +1,6 @@
 package io.thiiagoms.ims.shared.infrastructure.security;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -37,5 +38,13 @@ class SecurityConfigurationTest {
             post("/api/users/authenticate").contentType(MediaType.APPLICATION_JSON).content("{}"))
         .andExpect(SecurityMockMvcResultMatchers.unauthenticated())
         .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  void itAllowsAnonymousHealthChecks() throws Exception {
+    mockMvc
+        .perform(get("/actuator/health"))
+        .andExpect(SecurityMockMvcResultMatchers.unauthenticated())
+        .andExpect(status().isOk());
   }
 }
