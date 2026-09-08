@@ -7,6 +7,7 @@ import io.thiiagoms.ims.product.domain.valueobject.ImageUrl;
 import io.thiiagoms.ims.product.domain.valueobject.Price;
 import io.thiiagoms.ims.product.domain.valueobject.StockQuantity;
 import io.thiiagoms.ims.product.domain.valueobject.Title;
+import io.thiiagoms.ims.shared.domain.valueobject.Id;
 
 public record RegisterProductData(
     Title title,
@@ -15,4 +16,5 @@ public record RegisterProductData(
     Price price,
     StockQuantity stockQuantity,
     CategoryIds categoryIds,
+    Id supplierId,
     ExpiryDate expiryDate) {}

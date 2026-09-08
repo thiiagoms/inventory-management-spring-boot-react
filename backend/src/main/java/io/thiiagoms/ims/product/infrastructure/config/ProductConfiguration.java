@@ -12,6 +12,7 @@ import io.thiiagoms.ims.product.domain.SkuGenerator;
 import io.thiiagoms.ims.product.domain.repository.ProductRepository;
 import io.thiiagoms.ims.product.domain.valueobject.Sku;
 import io.thiiagoms.ims.shared.domain.identity.IdentityGenerator;
+import io.thiiagoms.ims.supplier.application.service.SupplierFinder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -33,9 +34,11 @@ public class ProductConfiguration {
       CategoryFinder categoryFinder,
       ProductRepository repository,
       IdentityGenerator generator,
-      ProductUniqueness uniqueness) {
+      ProductUniqueness uniqueness,
+      SupplierFinder supplierFinder) {
     SkuGenerator skuGenerator = Sku::generate;
-    return new RegisterProduct(categoryFinder, repository, generator, skuGenerator, uniqueness);
+    return new RegisterProduct(
+        categoryFinder, repository, generator, skuGenerator, uniqueness, supplierFinder);
   }
 
   @Bean

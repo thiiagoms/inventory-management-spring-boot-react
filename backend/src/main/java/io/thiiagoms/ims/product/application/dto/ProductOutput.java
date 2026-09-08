@@ -14,6 +14,7 @@ public record ProductOutput(
     BigDecimal price,
     Integer stockQuantity,
     List<String> categoryIds,
+    String supplierId,
     LocalDateTime expiryDate) {
   public ProductOutput {
     categoryIds = List.copyOf(categoryIds);
@@ -29,6 +30,7 @@ public record ProductOutput(
         product.price().value(),
         product.stockQuantity().value(),
         product.categoryIds().values().stream().map(categoryId -> categoryId.value()).toList(),
+        product.supplierId().value(),
         product.expiryDate().value());
   }
 }

@@ -23,6 +23,7 @@ public class ProductFake {
   private Price price;
   private StockQuantity stockQuantity;
   private CategoryIds categoryIds;
+  private Id supplierId;
   private ExpiryDate expiryDate;
 
   private ProductFake() {
@@ -39,6 +40,7 @@ public class ProductFake {
                 new Id("430e7bc1-59b9-472e-ae21-3cd90cde7caa"),
                 new Id("3780baf2-deed-448d-a763-ce7b06efd394"),
                 new Id("baa86496-638f-4beb-bc03-de2f7589ad63")));
+    supplierId = new Id("f1147c86-f31d-4683-9b86-46a665fed044");
     expiryDate = new ExpiryDate(LocalDateTime.of(2100, 1, 1, 0, 0));
   }
 
@@ -68,6 +70,15 @@ public class ProductFake {
 
   public Product build() {
     return Product.rehydrate(
-        id, title, description, sku, imageUrl, price, stockQuantity, categoryIds, expiryDate);
+        id,
+        title,
+        description,
+        sku,
+        imageUrl,
+        price,
+        stockQuantity,
+        categoryIds,
+        supplierId,
+        expiryDate);
   }
 }

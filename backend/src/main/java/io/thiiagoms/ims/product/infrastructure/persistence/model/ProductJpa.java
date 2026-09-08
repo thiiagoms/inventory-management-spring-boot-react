@@ -2,12 +2,14 @@ package io.thiiagoms.ims.product.infrastructure.persistence.model;
 
 import io.thiiagoms.ims.category.infrastructure.persistence.model.CategoryJpa;
 import io.thiiagoms.ims.shared.infrastructure.persistence.model.BaseJpaEntity;
+import io.thiiagoms.ims.supplier.infrastructure.persistence.model.SupplierJpa;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -48,6 +50,10 @@ public class ProductJpa extends BaseJpaEntity {
       joinColumns = @JoinColumn(name = "product_id"),
       inverseJoinColumns = @JoinColumn(name = "category_id"))
   private Set<CategoryJpa> categories;
+
+  @ManyToOne(fetch = FetchType.EAGER, optional = false)
+  @JoinColumn(name = "supplier_id", nullable = false)
+  private SupplierJpa supplier;
 
   @Column(name = "expiry_date", nullable = false)
   private LocalDateTime expiryDate;

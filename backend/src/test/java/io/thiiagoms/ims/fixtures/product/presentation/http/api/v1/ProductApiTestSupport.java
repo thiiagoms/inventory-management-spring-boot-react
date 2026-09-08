@@ -8,6 +8,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 public abstract class ProductApiTestSupport extends CategoryApiTestSupport {
   protected static final String PRODUCT_ENDPOINT = "/api/products";
+  private String supplierId = "f1147c86-f31d-4683-9b86-46a665fed044";
 
   protected ProductApiTestSupport(MockMvc mockMvc) {
     super(mockMvc);
@@ -21,6 +22,7 @@ public abstract class ProductApiTestSupport extends CategoryApiTestSupport {
         new BigDecimal("499.90"),
         10,
         List.copyOf(categoryIds),
+        supplierId,
         LocalDateTime.of(2100, 1, 1, 0, 0));
   }
 
@@ -31,12 +33,21 @@ public abstract class ProductApiTestSupport extends CategoryApiTestSupport {
       BigDecimal price,
       Integer stockQuantity,
       List<String> categoryIds,
+      String supplierId,
       LocalDateTime expiryDate) {}
 
   protected List<String> createProductCategories(String token) throws Exception {
+    supplierId =
+        postJsonAndReturnId(
+            "/api/suppliers",
+            new SupplierRequest(
+                "Acme Supplies Ltda", "11222333000181", "Praça da Sé, São Paulo - SP, 01001-000"),
+            token);
     return List.of(
         createCategory(token, "Office", "Office products"),
         createCategory(token, "Warehouse", "Warehouse products"),
         createCategory(token, "General", "General products"));
   }
+
+  private record SupplierRequest(String socialName, String cnpj, String address) {}
 }
