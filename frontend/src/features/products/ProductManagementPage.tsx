@@ -26,6 +26,8 @@ import { parseApiError } from '../../api/errors'
 import FormActions from '../../components/FormActions'
 import { listCategories } from '../categories/categoryApi'
 import type { CategoryResponse } from '../categories/types'
+import { listSuppliers } from '../suppliers/supplierApi'
+import type { SupplierResponse } from '../suppliers/types'
 import {
   deleteProduct,
   listProducts,
@@ -41,6 +43,7 @@ interface ProductFormState {
   price: string
   stockQuantity: string
   categoryIds: string[]
+  supplierId: string
   expiryDate: string
 }
 
@@ -51,12 +54,14 @@ const emptyForm: ProductFormState = {
   price: '',
   stockQuantity: '',
   categoryIds: [],
+  supplierId: '',
   expiryDate: '',
 }
 
 export default function ProductManagementPage() {
   const [products, setProducts] = useState<ProductResponse[]>([])
   const [categories, setCategories] = useState<CategoryResponse[]>([])
+  const [suppliers, setSuppliers] = useState<SupplierResponse[]>([])
   const [form, setForm] = useState<ProductFormState>(emptyForm)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [loadingList, setLoadingList] = useState(true)
@@ -71,17 +76,24 @@ export default function ProductManagementPage() {
     [categories],
   )
 
+  const supplierNames = useMemo(
+    () => new Map(suppliers.map((supplier) => [supplier.id, supplier.socialName])),
+    [suppliers],
+  )
+
   const loadData = useCallback(async () => {
     setLoadingList(true)
     setErrorMessage('')
 
     try {
-      const [availableProducts, availableCategories] = await Promise.all([
+      const [availableProducts, availableCategories, availableSuppliers] = await Promise.all([
         listProducts(),
         listCategories(),
+        listSuppliers(),
       ])
       setProducts(availableProducts)
       setCategories(availableCategories)
+      setSuppliers(availableSuppliers)
     } catch (requestError) {
       setErrorMessage(parseApiError(requestError).message)
     } finally {
@@ -94,14 +106,16 @@ export default function ProductManagementPage() {
 
     const initializeData = async () => {
       try {
-        const [availableProducts, availableCategories] = await Promise.all([
+        const [availableProducts, availableCategories, availableSuppliers] = await Promise.all([
           listProducts(),
           listCategories(),
+          listSuppliers(),
         ])
 
         if (active) {
           setProducts(availableProducts)
           setCategories(availableCategories)
+          setSuppliers(availableSuppliers)
         }
       } catch (requestError) {
         if (active) setErrorMessage(parseApiError(requestError).message)
@@ -172,6 +186,7 @@ export default function ProductManagementPage() {
       price: String(product.price),
       stockQuantity: String(product.stockQuantity),
       categoryIds: product.categoryIds,
+      supplierId: product.supplierId,
       expiryDate: product.expiryDate,
     })
     setSuccessMessage('')
@@ -209,7 +224,7 @@ export default function ProductManagementPage() {
 
           {editingId && (
             <Alert severity="info">
-              Categories and expiry date cannot be changed by the product update API.
+              Supplier, categories, and expiry date cannot be changed by the product update API.
             </Alert>
           )}
           {successMessage && <Alert severity="success">{successMessage}</Alert>}
@@ -245,6 +260,32 @@ export default function ProductManagementPage() {
             helperText={fieldError?.field === 'imageUrl' ? fieldError.message : undefined}
             required
           />
+
+          {!editingId && (
+            <FormControl required error={fieldError?.field === 'supplierId'}>
+              <InputLabel id="supplier-label">Supplier</InputLabel>
+              <Select
+                labelId="supplier-label"
+                label="Supplier"
+                value={form.supplierId}
+                onChange={(event) => updateField('supplierId', event.target.value)}
+                disabled={suppliers.length === 0}
+              >
+                {suppliers.map((supplier) => (
+                  <MenuItem key={supplier.id} value={supplier.id}>
+                    {supplier.socialName}
+                  </MenuItem>
+                ))}
+              </Select>
+              <FormHelperText>
+                {fieldError?.field === 'supplierId'
+                  ? fieldError.message
+                  : suppliers.length === 0
+                    ? 'Create a supplier before creating a product.'
+                    : 'Select the supplier for this product.'}
+              </FormHelperText>
+            </FormControl>
+          )}
 
           {!editingId && (
             <FormControl required error={fieldError?.field === 'categoryIds'}>
@@ -348,6 +389,7 @@ export default function ProductManagementPage() {
                   <TableCell>Price</TableCell>
                   <TableCell>Stock</TableCell>
                   <TableCell>Categories</TableCell>
+                  <TableCell>Supplier</TableCell>
                   <TableCell align="right">Actions</TableCell>
                 </TableRow>
               </TableHead>
@@ -367,6 +409,9 @@ export default function ProductManagementPage() {
                       {product.categoryIds
                         .map((categoryId) => categoryTitles.get(categoryId) ?? categoryId)
                         .join(', ')}
+                    </TableCell>
+                    <TableCell>
+                      {supplierNames.get(product.supplierId) ?? product.supplierId}
                     </TableCell>
                     <TableCell align="right">
                       <Stack direction="row" spacing={1} sx={{ justifyContent: 'flex-end' }}>

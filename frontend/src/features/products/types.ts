@@ -5,6 +5,7 @@ export interface RegisterProductRequest {
   price: number
   stockQuantity: number
   categoryIds: string[]
+  supplierId: string
   expiryDate: string
 }
 

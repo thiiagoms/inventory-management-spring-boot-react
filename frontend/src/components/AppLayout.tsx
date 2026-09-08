@@ -12,6 +12,7 @@ const publicNavigationItems = [
 
 const authenticatedNavigationItems = [
   { label: 'Categories', path: '/categories' },
+  { label: 'Suppliers', path: '/suppliers' },
   { label: 'Products', path: '/products' },
 ]
 
