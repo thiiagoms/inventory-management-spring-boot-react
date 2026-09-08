@@ -26,6 +26,9 @@ public class SecurityConfiguration {
   private static final RequestMatcher AUTHENTICATE_USER_ENDPOINT =
       PathPatternRequestMatcher.pathPattern(HttpMethod.POST, "/api/users/authenticate");
 
+  private static final RequestMatcher HEALTH_ENDPOINT =
+      PathPatternRequestMatcher.pathPattern(HttpMethod.GET, "/actuator/health");
+
   @Bean
   SecurityFilterChain securityFilterChain(HttpSecurity http, JwtProperties jwtProperties)
       throws Exception {
@@ -42,7 +45,8 @@ public class SecurityConfiguration {
         .authorizeHttpRequests(
             authorize ->
                 authorize
-                    .requestMatchers(REGISTER_USER_ENDPOINT, AUTHENTICATE_USER_ENDPOINT)
+                    .requestMatchers(
+                        REGISTER_USER_ENDPOINT, AUTHENTICATE_USER_ENDPOINT, HEALTH_ENDPOINT)
                     .permitAll()
                     .anyRequest()
                     .authenticated())
