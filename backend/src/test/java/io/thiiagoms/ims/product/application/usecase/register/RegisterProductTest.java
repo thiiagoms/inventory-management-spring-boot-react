@@ -11,6 +11,8 @@ import io.thiiagoms.ims.fixtures.category.infrastructure.persistence.repository.
 import io.thiiagoms.ims.fixtures.product.domain.SkuGeneratorStub;
 import io.thiiagoms.ims.fixtures.product.infrastructure.persistence.repository.ProductMemoryRepository;
 import io.thiiagoms.ims.fixtures.shared.domain.identity.IdentityGeneratorStub;
+import io.thiiagoms.ims.fixtures.supplier.domain.SupplierFake;
+import io.thiiagoms.ims.fixtures.supplier.infrastructure.persistence.repository.SupplierMemoryRepository;
 import io.thiiagoms.ims.product.application.exception.ProductSkuAlreadyExistsException;
 import io.thiiagoms.ims.product.application.exception.ProductTitleAlreadyExistsException;
 import io.thiiagoms.ims.product.application.service.ProductUniqueness;
@@ -25,6 +27,7 @@ import io.thiiagoms.ims.product.domain.valueobject.Sku;
 import io.thiiagoms.ims.product.domain.valueobject.StockQuantity;
 import io.thiiagoms.ims.product.domain.valueobject.Title;
 import io.thiiagoms.ims.shared.domain.valueobject.Id;
+import io.thiiagoms.ims.supplier.application.service.SupplierFinder;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -43,6 +46,8 @@ public class RegisterProductTest {
   private static final Sku GENERATED_SKU =
       new Sku("office-chair-123e4567-e89b-12d3-a456-426614174000-1725134400000");
 
+  private static final Id SUPPLIER_ID = new Id("f1147c86-f31d-4683-9b86-46a665fed044");
+
   private IdentityGeneratorStub identityGenerator;
 
   private SkuGeneratorStub skuGenerator;
@@ -50,6 +55,8 @@ public class RegisterProductTest {
   private ProductRepository repository;
 
   private CategoryMemoryRepository categoryRepository;
+
+  private SupplierMemoryRepository supplierRepository;
 
   private RegisterProduct useCase;
 
@@ -59,6 +66,8 @@ public class RegisterProductTest {
   void setUp() {
     repository = new ProductMemoryRepository();
     categoryRepository = new CategoryMemoryRepository();
+    supplierRepository = new SupplierMemoryRepository();
+    supplierRepository.save(SupplierFake.start().withId(SUPPLIER_ID).build());
     categoryRepository.save(CategoryFake.start().withId(CATEGORY_IDS.values().get(0)).build());
     categoryRepository.save(
         CategoryFake.start()
@@ -78,6 +87,7 @@ public class RegisterProductTest {
             new Price(new BigDecimal("499.90")),
             new StockQuantity(10),
             CATEGORY_IDS,
+            SUPPLIER_ID,
             new ExpiryDate(LocalDateTime.of(2100, 1, 1, 0, 0)));
     identityGenerator = new IdentityGeneratorStub();
     skuGenerator = new SkuGeneratorStub().willGenerate(GENERATED_SKU);
@@ -95,6 +105,7 @@ public class RegisterProductTest {
     assertEquals("Office Chair", output.title());
     assertTrue(output.sku().matches("office-chair-[0-9a-f-]{36}-\\d{13}"));
     assertEquals(CATEGORY_IDS.values().stream().map(Id::value).toList(), output.categoryIds());
+    assertEquals(SUPPLIER_ID.value(), output.supplierId());
     assertEquals(data.price().value(), output.price());
   }
 
@@ -110,6 +121,7 @@ public class RegisterProductTest {
             data.price(),
             data.stockQuantity(),
             data.categoryIds(),
+            data.supplierId(),
             data.expiryDate()));
 
     ProductTitleAlreadyExistsException exception =
@@ -124,6 +136,7 @@ public class RegisterProductTest {
                         data.price(),
                         data.stockQuantity(),
                         data.categoryIds(),
+                        data.supplierId(),
                         data.expiryDate())));
 
     assertEquals(Title.FIELD, exception.getField());
@@ -143,6 +156,7 @@ public class RegisterProductTest {
             data.price(),
             data.stockQuantity(),
             data.categoryIds(),
+            data.supplierId(),
             data.expiryDate()));
 
     ProductSkuAlreadyExistsException exception =
@@ -167,6 +181,7 @@ public class RegisterProductTest {
             data.price(),
             data.stockQuantity(),
             categoryIds,
+            data.supplierId(),
             data.expiryDate());
 
     CategoryNotFoundException exception =
@@ -184,6 +199,7 @@ public class RegisterProductTest {
         repository,
         identityGenerator,
         skuGenerator,
-        new ProductUniqueness(repository));
+        new ProductUniqueness(repository),
+        new SupplierFinder(supplierRepository));
   }
 }

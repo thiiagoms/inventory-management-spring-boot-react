@@ -9,6 +9,7 @@ import io.thiiagoms.ims.product.infrastructure.persistence.mapper.ProductMapper;
 import io.thiiagoms.ims.shared.domain.pagination.Page;
 import io.thiiagoms.ims.shared.domain.pagination.Pagination;
 import io.thiiagoms.ims.shared.domain.valueobject.Id;
+import io.thiiagoms.ims.supplier.infrastructure.persistence.repository.SupplierJpaRepository;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -20,11 +21,15 @@ import org.springframework.stereotype.Repository;
 public class ProductRepositoryImpl implements ProductRepository {
   private final ProductJpaRepository repository;
   private final CategoryJpaRepository categoryRepository;
+  private final SupplierJpaRepository supplierRepository;
 
   public ProductRepositoryImpl(
-      ProductJpaRepository repository, CategoryJpaRepository categoryRepository) {
+      ProductJpaRepository repository,
+      CategoryJpaRepository categoryRepository,
+      SupplierJpaRepository supplierRepository) {
     this.repository = repository;
     this.categoryRepository = categoryRepository;
+    this.supplierRepository = supplierRepository;
   }
 
   public Optional<Product> findById(Id id) {
@@ -61,10 +66,13 @@ public class ProductRepositoryImpl implements ProductRepository {
                 categoryId ->
                     categoryRepository.getReferenceById(UUID.fromString(categoryId.value())))
             .collect(java.util.stream.Collectors.toSet());
-    repository.save(ProductMapper.toPersistence(product, Set.copyOf(categories)));
+    var supplier =
+        supplierRepository.getReferenceById(UUID.fromString(product.supplierId().value()));
+    repository.saveAndFlush(ProductMapper.toPersistence(product, Set.copyOf(categories), supplier));
   }
 
   public void destroy(Id id) {
     repository.deleteById(UUID.fromString(id.value()));
+    repository.flush();
   }
 }

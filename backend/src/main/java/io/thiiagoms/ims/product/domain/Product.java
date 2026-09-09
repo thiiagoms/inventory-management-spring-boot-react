@@ -29,6 +29,8 @@ public final class Product {
 
   private final CategoryIds categoryIds;
 
+  private final Id supplierId;
+
   private final ExpiryDate expiryDate;
 
   private Product(
@@ -40,6 +42,7 @@ public final class Product {
       Price price,
       StockQuantity stockQuantity,
       CategoryIds categoryIds,
+      Id supplierId,
       ExpiryDate expiryDate) {
     Guard.againstNull(Id.FIELD, id);
     Guard.againstNull(Title.FIELD, title);
@@ -49,6 +52,7 @@ public final class Product {
     Guard.againstNull(Price.FIELD, price);
     Guard.againstNull(StockQuantity.FIELD, stockQuantity);
     Guard.againstNull(CategoryIds.FIELD, categoryIds);
+    Guard.againstNull("supplierId", supplierId);
     Guard.againstNull(ExpiryDate.FIELD, expiryDate);
 
     this.id = id;
@@ -59,6 +63,7 @@ public final class Product {
     this.price = price;
     this.stockQuantity = stockQuantity;
     this.categoryIds = categoryIds;
+    this.supplierId = supplierId;
     this.expiryDate = expiryDate;
   }
 
@@ -71,9 +76,19 @@ public final class Product {
       Price price,
       StockQuantity stockQuantity,
       CategoryIds categoryIds,
+      Id supplierId,
       ExpiryDate expiryDate) {
     return new Product(
-        id, title, description, sku, imageUrl, price, stockQuantity, categoryIds, expiryDate);
+        id,
+        title,
+        description,
+        sku,
+        imageUrl,
+        price,
+        stockQuantity,
+        categoryIds,
+        supplierId,
+        expiryDate);
   }
 
   public static Product rehydrate(
@@ -85,9 +100,19 @@ public final class Product {
       Price price,
       StockQuantity stockQuantity,
       CategoryIds categoryIds,
+      Id supplierId,
       ExpiryDate expiryDate) {
     return new Product(
-        id, title, description, sku, imageUrl, price, stockQuantity, categoryIds, expiryDate);
+        id,
+        title,
+        description,
+        sku,
+        imageUrl,
+        price,
+        stockQuantity,
+        categoryIds,
+        supplierId,
+        expiryDate);
   }
 
   public Id id() {
@@ -120,6 +145,10 @@ public final class Product {
 
   public CategoryIds categoryIds() {
     return categoryIds;
+  }
+
+  public Id supplierId() {
+    return supplierId;
   }
 
   public ExpiryDate expiryDate() {

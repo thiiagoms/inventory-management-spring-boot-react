@@ -23,6 +23,7 @@ public record RegisterProductRequest(
     @NotNull @Positive BigDecimal price,
     @NotNull @Positive Integer stockQuantity,
     @NotNull List<@NotBlank String> categoryIds,
+    @NotBlank String supplierId,
     @NotNull LocalDateTime expiryDate) {
   public RegisterProductRequest {
     categoryIds = categoryIds == null ? null : List.copyOf(categoryIds);
@@ -36,6 +37,7 @@ public record RegisterProductRequest(
         new Price(price),
         new StockQuantity(stockQuantity),
         new CategoryIds(categoryIds.stream().map(Id::new).toList()),
+        new Id(supplierId),
         new ExpiryDate(expiryDate));
   }
 }

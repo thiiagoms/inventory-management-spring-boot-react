@@ -8,6 +8,7 @@ import io.thiiagoms.ims.product.domain.SkuGenerator;
 import io.thiiagoms.ims.product.domain.repository.ProductRepository;
 import io.thiiagoms.ims.product.domain.valueobject.Sku;
 import io.thiiagoms.ims.shared.domain.identity.IdentityGenerator;
+import io.thiiagoms.ims.supplier.application.service.SupplierFinder;
 import org.springframework.transaction.annotation.Transactional;
 
 public class RegisterProduct {
@@ -22,17 +23,21 @@ public class RegisterProduct {
 
   private final ProductUniqueness uniqueness;
 
+  private final SupplierFinder supplierFinder;
+
   public RegisterProduct(
       CategoryFinder categoryFinder,
       ProductRepository repository,
       IdentityGenerator identityGenerator,
       SkuGenerator skuGenerator,
-      ProductUniqueness uniqueness) {
+      ProductUniqueness uniqueness,
+      SupplierFinder supplierFinder) {
     this.uniqueness = uniqueness;
     this.repository = repository;
     this.categoryFinder = categoryFinder;
     this.identityGenerator = identityGenerator;
     this.skuGenerator = skuGenerator;
+    this.supplierFinder = supplierFinder;
   }
 
   @Transactional
@@ -41,6 +46,7 @@ public class RegisterProduct {
     Sku sku = skuGenerator.generate(data.title());
     uniqueness.ensureSkuIsAvailable(sku);
     data.categoryIds().values().forEach(categoryFinder::byId);
+    supplierFinder.byId(data.supplierId());
     Product product = build(data, sku);
 
     repository.save(product);
@@ -58,6 +64,7 @@ public class RegisterProduct {
         data.price(),
         data.stockQuantity(),
         data.categoryIds(),
+        data.supplierId(),
         data.expiryDate());
   }
 }
