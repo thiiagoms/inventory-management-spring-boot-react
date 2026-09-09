@@ -6,7 +6,9 @@ import io.thiiagoms.ims.supplier.domain.repository.SupplierRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 public class DestroySupplier {
+
   private final SupplierFinder finder;
+
   private final SupplierRepository repository;
 
   public DestroySupplier(SupplierFinder finder, SupplierRepository repository) {

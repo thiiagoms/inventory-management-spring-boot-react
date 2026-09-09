@@ -4,6 +4,7 @@ import type {
   SupplierPageResponse,
   SupplierRequest,
   SupplierResponse,
+  UpdateSupplierRequest,
   ViaCepResponse,
 } from './types'
 
@@ -26,7 +27,7 @@ export async function listSuppliers(): Promise<SupplierResponse[]> {
 
 export async function updateSupplier(
   id: string,
-  request: SupplierRequest,
+  request: UpdateSupplierRequest,
 ): Promise<SupplierResponse> {
   const response = await httpClient.patch<SupplierResponse>(`/api/suppliers/${id}`, request)
   return response.data

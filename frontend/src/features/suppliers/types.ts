@@ -4,8 +4,16 @@ export interface SupplierRequest {
   address: string
 }
 
-export interface SupplierResponse extends SupplierRequest {
+export interface UpdateSupplierRequest {
+  socialName: string
+  address: string
+}
+
+export interface SupplierResponse {
   id: string
+  socialName: string
+  cnpj: string
+  address: string
   createdAt: string
 }
 

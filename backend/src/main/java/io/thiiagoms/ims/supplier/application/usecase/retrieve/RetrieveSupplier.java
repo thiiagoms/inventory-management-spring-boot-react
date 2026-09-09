@@ -5,6 +5,7 @@ import io.thiiagoms.ims.supplier.application.dto.SupplierOutput;
 import io.thiiagoms.ims.supplier.application.service.SupplierFinder;
 
 public class RetrieveSupplier {
+
   private final SupplierFinder finder;
 
   public RetrieveSupplier(SupplierFinder finder) {

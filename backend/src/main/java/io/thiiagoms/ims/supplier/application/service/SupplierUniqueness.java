@@ -7,6 +7,7 @@ import io.thiiagoms.ims.supplier.domain.valueobject.Cnpj;
 import io.thiiagoms.ims.supplier.domain.valueobject.SocialName;
 
 public class SupplierUniqueness {
+
   private final SupplierRepository repository;
 
   public SupplierUniqueness(SupplierRepository repository) {

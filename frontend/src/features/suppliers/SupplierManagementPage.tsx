@@ -143,7 +143,10 @@ export default function SupplierManagementPage() {
     setFieldError(null)
     try {
       const supplier = editingId
-        ? await updateSupplier(editingId, form)
+        ? await updateSupplier(editingId, {
+            socialName: form.socialName,
+            address: form.address,
+          })
         : await registerSupplier(form)
       setSuccessMessage(
         `Supplier “${supplier.socialName}” ${editingId ? 'updated' : 'created'} successfully.`,
@@ -212,9 +215,16 @@ export default function SupplierManagementPage() {
             value={formatCnpj(form.cnpj)}
             onChange={(event) => updateField('cnpj', event.target.value.replace(/\D/g, '').slice(0, 14))}
             error={fieldError?.field === 'cnpj'}
-            helperText={fieldError?.field === 'cnpj' ? fieldError.message : undefined}
+            helperText={
+              fieldError?.field === 'cnpj'
+                ? fieldError.message
+                : editingId
+                  ? 'CNPJ cannot be changed after registration.'
+                  : undefined
+            }
             placeholder="12.345.678/0001-90"
             slotProps={{ htmlInput: { inputMode: 'numeric' } }}
+            disabled={editingId !== null}
             required
           />
 

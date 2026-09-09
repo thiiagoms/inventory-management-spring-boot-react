@@ -7,6 +7,7 @@ import io.thiiagoms.ims.shared.domain.exception.InvalidDomainArgumentException;
 import org.junit.jupiter.api.Test;
 
 class CnpjTest {
+
   @Test
   void itNormalizesAFormattedCnpj() {
     assertEquals("11222333000181", new Cnpj("11.222.333/0001-81").value());
