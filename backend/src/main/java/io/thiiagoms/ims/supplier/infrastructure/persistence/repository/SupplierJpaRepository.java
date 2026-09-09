@@ -7,4 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SupplierJpaRepository extends JpaRepository<SupplierJpa, UUID> {
   Optional<SupplierJpa> findByCnpj(String cnpj);
+
+  Optional<SupplierJpa> findBySocialName(String socialName);
 }

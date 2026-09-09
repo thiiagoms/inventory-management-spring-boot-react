@@ -8,10 +8,15 @@ import io.thiiagoms.ims.supplier.domain.valueobject.Cnpj;
 import io.thiiagoms.ims.supplier.domain.valueobject.SocialName;
 
 public final class Supplier {
+
   private final Id id;
+
   private SocialName socialName;
-  private Cnpj cnpj;
+
+  private final Cnpj cnpj;
+
   private Address address;
+
   private final Timestamp createdAt;
 
   private Supplier(Id id, SocialName socialName, Cnpj cnpj, Address address, Timestamp createdAt) {
@@ -59,12 +64,11 @@ public final class Supplier {
 
   public void changeSocialNameTo(SocialName socialName) {
     Guard.againstNull(SocialName.FIELD, socialName);
-    this.socialName = socialName;
-  }
+    if (this.socialName.equals(socialName)) {
+      return;
+    }
 
-  public void changeCnpjTo(Cnpj cnpj) {
-    Guard.againstNull(Cnpj.FIELD, cnpj);
-    this.cnpj = cnpj;
+    this.socialName = socialName;
   }
 
   public void changeAddressTo(Address address) {

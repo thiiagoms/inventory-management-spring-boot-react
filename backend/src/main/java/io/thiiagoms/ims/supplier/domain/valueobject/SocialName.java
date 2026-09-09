@@ -5,8 +5,11 @@ import io.thiiagoms.ims.shared.domain.support.Guard;
 import java.util.regex.Pattern;
 
 public record SocialName(String value) {
+
   public static final String FIELD = "socialName";
+
   private static final int MAX_LENGTH = 250;
+
   private static final Pattern MULTIPLE_SPACES = Pattern.compile("\\s+");
 
   public SocialName {

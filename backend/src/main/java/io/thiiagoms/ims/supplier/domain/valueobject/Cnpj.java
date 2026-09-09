@@ -5,7 +5,9 @@ import io.thiiagoms.ims.shared.domain.support.Guard;
 import java.util.regex.Pattern;
 
 public record Cnpj(String value) {
+
   public static final String FIELD = "cnpj";
+
   private static final Pattern ALLOWED_CHARACTERS = Pattern.compile("[0-9./\\-]+$");
   private static final Pattern NON_DIGITS = Pattern.compile("\\D");
   private static final Pattern REPEATED_DIGITS = Pattern.compile("(\\d)\\1{13}");
@@ -36,9 +38,11 @@ public record Cnpj(String value) {
 
   private static int calculateDigit(String source, int[] weights) {
     int sum = 0;
+
     for (int index = 0; index < weights.length; index++) {
       sum += Character.digit(source.charAt(index), 10) * weights[index];
     }
+
     int remainder = sum % 11;
     return remainder < 2 ? 0 : 11 - remainder;
   }

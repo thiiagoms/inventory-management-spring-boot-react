@@ -9,9 +9,12 @@ import io.thiiagoms.ims.supplier.domain.repository.SupplierRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 public class UpdateSupplier {
+
   private final SupplierFinder finder;
-  private final SupplierRepository repository;
+
   private final SupplierUniqueness uniqueness;
+
+  private final SupplierRepository repository;
 
   public UpdateSupplier(
       SupplierFinder finder, SupplierRepository repository, SupplierUniqueness uniqueness) {
@@ -23,10 +26,7 @@ public class UpdateSupplier {
   @Transactional
   public SupplierOutput execute(UpdateSupplierData data) {
     var supplier = finder.byId(data.id());
-    boolean changed =
-        updateSocialName(supplier, data)
-            | updateCnpj(supplier, data)
-            | updateAddress(supplier, data);
+    boolean changed = updateSocialName(supplier, data) | updateAddress(supplier, data);
     if (!changed) {
       throw SupplierNotChangedException.create();
     }
@@ -39,19 +39,8 @@ public class UpdateSupplier {
         .filter(value -> !value.equals(supplier.socialName()))
         .map(
             value -> {
+              uniqueness.ensureSocialNameIsAvailable(value);
               supplier.changeSocialNameTo(value);
-              return true;
-            })
-        .orElse(false);
-  }
-
-  private boolean updateCnpj(Supplier supplier, UpdateSupplierData data) {
-    return data.cnpj()
-        .filter(value -> !value.equals(supplier.cnpj()))
-        .map(
-            value -> {
-              uniqueness.ensureCnpjIsAvailable(value);
-              supplier.changeCnpjTo(value);
               return true;
             })
         .orElse(false);

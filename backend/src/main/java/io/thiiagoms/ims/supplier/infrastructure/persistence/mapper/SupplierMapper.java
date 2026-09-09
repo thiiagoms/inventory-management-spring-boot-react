@@ -11,6 +11,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 public final class SupplierMapper {
+
   private SupplierMapper() {}
 
   public static SupplierJpa toPersistence(Supplier supplier) {

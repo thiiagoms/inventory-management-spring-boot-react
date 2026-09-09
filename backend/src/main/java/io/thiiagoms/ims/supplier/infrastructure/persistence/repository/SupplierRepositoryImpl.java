@@ -6,6 +6,7 @@ import io.thiiagoms.ims.shared.domain.valueobject.Id;
 import io.thiiagoms.ims.supplier.domain.Supplier;
 import io.thiiagoms.ims.supplier.domain.repository.SupplierRepository;
 import io.thiiagoms.ims.supplier.domain.valueobject.Cnpj;
+import io.thiiagoms.ims.supplier.domain.valueobject.SocialName;
 import io.thiiagoms.ims.supplier.infrastructure.persistence.mapper.SupplierMapper;
 import java.util.Optional;
 import java.util.UUID;
@@ -29,6 +30,11 @@ public class SupplierRepositoryImpl implements SupplierRepository {
   @Override
   public Optional<Supplier> findByCnpj(Cnpj cnpj) {
     return repository.findByCnpj(cnpj.value()).map(SupplierMapper::toDomain);
+  }
+
+  @Override
+  public Optional<Supplier> findBySocialName(SocialName socialName) {
+    return repository.findBySocialName(socialName.value()).map(SupplierMapper::toDomain);
   }
 
   @Override

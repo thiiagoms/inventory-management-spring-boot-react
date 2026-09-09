@@ -15,7 +15,7 @@ import lombok.experimental.SuperBuilder;
 @Table(name = "suppliers")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SupplierJpa extends BaseJpaEntity {
-  @Column(name = "social_name", nullable = false, length = 250)
+  @Column(name = "social_name", nullable = false, unique = true, length = 250)
   private String socialName;
 
   @Column(name = "cnpj", nullable = false, unique = true, length = 14)

@@ -9,9 +9,13 @@ import io.thiiagoms.ims.supplier.domain.repository.SupplierRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 public class RegisterSupplier {
+
   private final SupplierRepository repository;
+
   private final IdentityGenerator identityGenerator;
+
   private final Clock clock;
+
   private final SupplierUniqueness uniqueness;
 
   public RegisterSupplier(
@@ -27,15 +31,18 @@ public class RegisterSupplier {
 
   @Transactional
   public SupplierOutput execute(RegisterSupplierData data) {
+    uniqueness.ensureSocialNameIsAvailable(data.socialName());
     uniqueness.ensureCnpjIsAvailable(data.cnpj());
-    var supplier =
-        Supplier.register(
-            identityGenerator.generate(),
-            data.socialName(),
-            data.cnpj(),
-            data.address(),
-            clock.now());
+
+    var supplier = build(data);
+
     repository.save(supplier);
+
     return SupplierOutput.from(supplier);
+  }
+
+  private Supplier build(RegisterSupplierData data) {
+    return Supplier.register(
+        identityGenerator.generate(), data.socialName(), data.cnpj(), data.address(), clock.now());
   }
 }

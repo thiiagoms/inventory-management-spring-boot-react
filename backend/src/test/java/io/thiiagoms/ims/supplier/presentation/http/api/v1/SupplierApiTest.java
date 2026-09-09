@@ -37,10 +37,8 @@ class SupplierApiTest extends CategoryApiTestSupport {
 
     patchJson(
             ENDPOINT + "/" + id,
-            new SupplierRequest(
-                "Acme Distribution Ltda",
-                "11.222.333/0001-81",
-                "Avenida Paulista, São Paulo - SP, 01310-100"),
+            new SupplierUpdateRequest(
+                "Acme Distribution Ltda", "Avenida Paulista, São Paulo - SP, 01310-100"),
             token)
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.socialName").value("Acme Distribution Ltda"));
@@ -74,6 +72,78 @@ class SupplierApiTest extends CategoryApiTestSupport {
   }
 
   @Test
+  void itRejectsADuplicateSocialNameOnRegistration() throws Exception {
+    String token = authenticate();
+    var request =
+        new SupplierRequest(
+            "Acme Supplies Ltda", "11.222.333/0001-81", "Praça da Sé, São Paulo - SP, 01001-000");
+    postJson(ENDPOINT, request, token).andExpect(status().isCreated());
+
+    postJson(
+            ENDPOINT,
+            new SupplierRequest(
+                request.socialName(),
+                "12.345.678/0001-95",
+                "Avenida Paulista, São Paulo - SP, 01310-100"),
+            token)
+        .andExpect(status().isConflict())
+        .andExpect(jsonPath("$.field").value("socialName"));
+  }
+
+  @Test
+  void itRejectsADuplicateSocialNameOnUpdate() throws Exception {
+    String token = authenticate();
+    postJson(
+            ENDPOINT,
+            new SupplierRequest(
+                "Acme Supplies Ltda",
+                "11.222.333/0001-81",
+                "Praça da Sé, São Paulo - SP, 01001-000"),
+            token)
+        .andExpect(status().isCreated());
+    String secondSupplierId =
+        postJsonAndReturnId(
+            ENDPOINT,
+            new SupplierRequest(
+                "Another Supplier",
+                "12.345.678/0001-95",
+                "Avenida Paulista, São Paulo - SP, 01310-100"),
+            token);
+
+    patchJson(
+            ENDPOINT + "/" + secondSupplierId,
+            new SupplierUpdateRequest(
+                "Acme Supplies Ltda", "Avenida Paulista, São Paulo - SP, 01310-100"),
+            token)
+        .andExpect(status().isConflict())
+        .andExpect(jsonPath("$.field").value("socialName"));
+  }
+
+  @Test
+  void itDoesNotUpdateTheCnpjAfterRegistration() throws Exception {
+    String token = authenticate();
+    String id =
+        postJsonAndReturnId(
+            ENDPOINT,
+            new SupplierRequest(
+                "Acme Supplies Ltda",
+                "11.222.333/0001-81",
+                "Praça da Sé, São Paulo - SP, 01001-000"),
+            token);
+
+    patchJson(
+            ENDPOINT + "/" + id,
+            new AttemptedCnpjUpdate(
+                "Acme Supplies Ltda",
+                "12.345.678/0001-95",
+                "Avenida Paulista, São Paulo - SP, 01310-100"),
+            token)
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.cnpj").value("11222333000181"))
+        .andExpect(jsonPath("$.address").value("Avenida Paulista, São Paulo - SP, 01310-100"));
+  }
+
+  @Test
   void itRequiresAuthentication() throws Exception {
     postJson(
             ENDPOINT,
@@ -85,4 +155,8 @@ class SupplierApiTest extends CategoryApiTestSupport {
   }
 
   private record SupplierRequest(String socialName, String cnpj, String address) {}
+
+  private record SupplierUpdateRequest(String socialName, String address) {}
+
+  private record AttemptedCnpjUpdate(String socialName, String cnpj, String address) {}
 }
