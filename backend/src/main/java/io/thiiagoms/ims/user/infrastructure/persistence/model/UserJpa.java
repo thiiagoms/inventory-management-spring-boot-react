@@ -1,14 +1,11 @@
 package io.thiiagoms.ims.user.infrastructure.persistence.model;
 
-import io.thiiagoms.ims.models.Transaction;
 import io.thiiagoms.ims.shared.infrastructure.persistence.model.BaseJpaEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import java.time.Instant;
-import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -40,9 +37,6 @@ public class UserJpa extends BaseJpaEntity {
   @NotBlank(message = "Role is required.")
   @Column(name = "role", nullable = false)
   private String role;
-
-  @OneToMany(mappedBy = "user")
-  private List<Transaction> transactions;
 
   @Column(name = "last_login_at")
   private Instant lastLoginAt;
